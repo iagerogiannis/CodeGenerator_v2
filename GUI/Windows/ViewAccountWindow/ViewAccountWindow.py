@@ -1,0 +1,58 @@
+from PyQt4.QtCore import Qt
+from PyQt4.QtGui import QDialog, QPixmap, QVBoxLayout, QIcon, QLabel
+
+from GUI.Windows.ViewAccountWindow.InfoField import InfoField
+from GUI.Windows.ViewAccountWindow.RemoveAccountField import RemoveAccountField
+
+
+# # noinspection PyCallByClass,PyArgumentList
+class ViewAccountWindow(QDialog):
+
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.parent = parent
+        self.build_UI()
+        self.show()
+
+    def build_UI(self):
+
+        # Image --------------------------------------------------------------------------------------------------------
+        image = QLabel()
+        pixmap = QPixmap("Files/avatar.png")
+        image.setPixmap(pixmap)
+        image.setContentsMargins(0, 20, 0, 0)
+        image.setAlignment(Qt.AlignCenter)
+
+        # Title --------------------------------------------------------------------------------------------------------
+        title = QLabel()
+        title.setText("Account Info")
+        title.setAlignment(Qt.AlignCenter)
+        title.setStyleSheet("font: 25pt Cronus Round")
+        title.setMargin(10)
+
+        # Labels -------------------------------------------------------------------------------------------------------
+        self.username = InfoField(self, "Username", "iagerogiannis")
+        self.email = InfoField(self, "Email Address", "iagerogiannis@gmail.com")
+        self.password = InfoField(self, "Password", "************")
+        self.remove = RemoveAccountField(self)
+
+        # Total Layout -------------------------------------------------------------------------------------------------
+        layout = QVBoxLayout()
+
+        layout.addWidget(image)
+        layout.addWidget(title)
+        layout.addWidget(self.username)
+        layout.addWidget(self.email)
+        layout.addWidget(self.password)
+        layout.addWidget(self.remove)
+
+        self.setLayout(layout)
+
+        layout.setMargin(20)
+        self.setWindowTitle("Code Generator")
+        self.setWindowIcon(QIcon("Files/app.ico"))
+        self.setFixedSize(350, 410)
+
+    def closeEvent(self, event):
+        self.parent.setEnabled(True)
+        self.parent.setWindowOpacity(1.)

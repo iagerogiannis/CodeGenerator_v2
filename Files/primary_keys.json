@@ -1,0 +1,284 @@
+[
+  {
+    "id": 0,
+    "type": "Symbol",
+    "shiftOut": "`",
+    "shiftIn": "~"
+  },
+  {
+    "id": 1,
+    "type": "Number",
+    "shiftOut": "1",
+    "shiftIn": "!"
+  },
+  {
+    "id": 2,
+    "type": "Number",
+    "shiftOut": "2",
+    "shiftIn": "@"
+  },
+  {
+    "id": 3,
+    "type": "Number",
+    "shiftOut": "3",
+    "shiftIn": "#"
+  },
+  {
+    "id": 4,
+    "type": "Number",
+    "shiftOut": "4",
+    "shiftIn": "$"
+  },
+  {
+    "id": 5,
+    "type": "Number",
+    "shiftOut": "5",
+    "shiftIn": "%"
+  },
+  {
+    "id": 6,
+    "type": "Number",
+    "shiftOut": "6",
+    "shiftIn": "^"
+  },
+  {
+    "id": 7,
+    "type": "Number",
+    "shiftOut": "7",
+    "shiftIn": "&"
+  },
+  {
+    "id": 8,
+    "type": "Number",
+    "shiftOut": "8",
+    "shiftIn": "*"
+  },
+  {
+    "id": 9,
+    "type": "Number",
+    "shiftOut": "9",
+    "shiftIn": "("
+  },
+  {
+    "id": 10,
+    "type": "Number",
+    "shiftOut": "0",
+    "shiftIn": ")"
+  },
+  {
+    "id": 11,
+    "type": "Symbol",
+    "shiftOut": "-",
+    "shiftIn": "_"
+  },
+  {
+    "id": 12,
+    "type": "Symbol",
+    "shiftOut": "=",
+    "shiftIn": "+"
+  },
+  {
+    "id": 13,
+    "type": "Letter",
+    "shiftOut": "q",
+    "shiftIn": "Q"
+  },
+  {
+    "id": 14,
+    "type": "Letter",
+    "shiftOut": "w",
+    "shiftIn": "W"
+  },
+  {
+    "id": 15,
+    "type": "Letter",
+    "shiftOut": "e",
+    "shiftIn": "E"
+  },
+  {
+    "id": 16,
+    "type": "Letter",
+    "shiftOut": "r",
+    "shiftIn": "R"
+  },
+  {
+    "id": 17,
+    "type": "Letter",
+    "shiftOut": "t",
+    "shiftIn": "T"
+  },
+  {
+    "id": 18,
+    "type": "Letter",
+    "shiftOut": "y",
+    "shiftIn": "Y"
+  },
+  {
+    "id": 19,
+    "type": "Letter",
+    "shiftOut": "u",
+    "shiftIn": "U"
+  },
+  {
+    "id": 20,
+    "type": "Letter",
+    "shiftOut": "i",
+    "shiftIn": "I"
+  },
+  {
+    "id": 21,
+    "type": "Letter",
+    "shiftOut": "o",
+    "shiftIn": "O"
+  },
+  {
+    "id": 22,
+    "type": "Letter",
+    "shiftOut": "p",
+    "shiftIn": "P"
+  },
+  {
+    "id": 23,
+    "type": "Symbol",
+    "shiftOut": "[",
+    "shiftIn": "{"
+  },
+  {
+    "id": 24,
+    "type": "Symbol",
+    "shiftOut": "]",
+    "shiftIn": "}"
+  },
+  {
+    "id": 25,
+    "type": "Symbol",
+    "shiftOut": "\\",
+    "shiftIn": "|"
+  },
+  {
+    "id": 26,
+    "type": "Letter",
+    "shiftOut": "a",
+    "shiftIn": "A"
+  },
+  {
+    "id": 27,
+    "type": "Letter",
+    "shiftOut": "s",
+    "shiftIn": "S"
+  },
+  {
+    "id": 28,
+    "type": "Letter",
+    "shiftOut": "d",
+    "shiftIn": "D"
+  },
+  {
+    "id": 29,
+    "type": "Letter",
+    "shiftOut": "f",
+    "shiftIn": "F"
+  },
+  {
+    "id": 29,
+    "type": "Letter",
+    "shiftOut": "g",
+    "shiftIn": "G"
+  },
+  {
+    "id": 30,
+    "type": "Letter",
+    "shiftOut": "h",
+    "shiftIn": "H"
+  },
+  {
+    "id": 31,
+    "type": "Letter",
+    "shiftOut": "j",
+    "shiftIn": "J"
+  },
+  {
+    "id": 32,
+    "type": "Letter",
+    "shiftOut": "k",
+    "shiftIn": "K"
+  },
+  {
+    "id": 33,
+    "type": "Letter",
+    "shiftOut": "l",
+    "shiftIn": "L"
+  },
+  {
+    "id": 34,
+    "type": "Symbol",
+    "shiftOut": ";",
+    "shiftIn": ":"
+  },
+  {
+    "id": 35,
+    "type": "Symbol",
+    "shiftOut": "'",
+    "shiftIn": "\""
+  },
+  {
+    "id": 36,
+    "type": "Letter",
+    "shiftOut": "z",
+    "shiftIn": "Z"
+  },
+  {
+    "id": 37,
+    "type": "Letter",
+    "shiftOut": "x",
+    "shiftIn": "X"
+  },
+  {
+    "id": 38,
+    "type": "Letter",
+    "shiftOut": "c",
+    "shiftIn": "C"
+  },
+  {
+    "id": 39,
+    "type": "Letter",
+    "shiftOut": "v",
+    "shiftIn": "V"
+  },
+  {
+    "id": 40,
+    "type": "Letter",
+    "shiftOut": "b",
+    "shiftIn": "B"
+  },
+  {
+    "id": 41,
+    "type": "Letter",
+    "shiftOut": "n",
+    "shiftIn": "N"
+  },
+  {
+    "id": 42,
+    "type": "Letter",
+    "shiftOut": "m",
+    "shiftIn": "M"
+  },
+  {
+    "id": 43,
+    "type": "Symbol",
+    "shiftOut": ",",
+    "shiftIn": "<"
+  },
+  {
+    "id": 44,
+    "type": "Symbol",
+    "shiftOut": ".",
+    "shiftIn": ">"
+  },
+  {
+    "id": 45,
+    "type": "Symbol",
+    "shiftOut": "/",
+    "shiftIn": "?"
+  }
+]

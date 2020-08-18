@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "name": "Default",
+    "keyboardStyle": {
+      "keyStyle": {
+        "fontFamily": "Microsoft YaHei",
+        "offset": 1,
+        "colors": {
+          "active": {
+            "background": "#FF6103",
+            "text": "white"
+          },
+          "inactive": {
+            "background": "black",
+            "text": "white"
+          },
+          "onPress": {
+            "background": "#FF0000",
+            "text": "black"
+          },
+          "onHover": {
+            "background": "gray",
+            "text": "white"
+          }
+        }
+      }
+    }
+  }
+]

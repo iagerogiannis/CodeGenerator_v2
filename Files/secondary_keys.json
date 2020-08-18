@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "type": "Secondary",
+    "text": "Backspace",
+    "side": "right",
+    "aspectRatio": [2.4, 1.45]
+  },
+  {
+    "id": 2,
+    "type": "Secondary",
+    "text": "Tab",
+    "side": "left",
+    "aspectRatio": [2.4, 1.45]
+  },
+  {
+    "id": 3,
+    "type": "Secondary",
+    "text": "Caps Lock",
+    "side": "left",
+    "aspectRatio": [27.5, 57]
+  },
+  {
+    "id": 4,
+    "type": "Secondary",
+    "text": "Enter",
+    "side": "right",
+    "aspectRatio": [29.5, 57]
+  },
+  {
+    "id": 5,
+    "type": "Secondary",
+    "text": "Shift",
+    "side": "left",
+    "aspectRatio": [37, 76]
+  },
+  {
+    "id": 6,
+    "type": "Secondary",
+    "text": "Shift",
+    "side": "right",
+    "aspectRatio": [39, 76]
+  }
+]
