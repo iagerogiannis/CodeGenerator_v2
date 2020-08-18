@@ -25,16 +25,16 @@ class NewCodeWindow(QDialog):
         self.codeLine.setReadOnly(True)
 
         self.newButton = QPushButton(self)
-        self.newButton.setText("New Code")
-        self.newButton.clicked.connect(self.handleNewCode)
+        self.newButton.setText("New")
+        self.newButton.clicked.connect(self.handleNew)
 
-        self.changeRowButton = QPushButton(self)
-        self.changeRowButton.setText("Change Row")
-        self.changeRowButton.clicked.connect(self.handleChangeRow)
+        self.shuffleButton = QPushButton(self)
+        self.shuffleButton.setText("Shuffle")
+        self.shuffleButton.clicked.connect(self.handleShuffle)
 
         self.saveButton = QPushButton(self)
-        self.saveButton.setText("Save Code")
-        self.saveButton.clicked.connect(self.handleSaveCode)
+        self.saveButton.setText("Save")
+        self.saveButton.clicked.connect(self.handleSave)
 
         codelayout = QHBoxLayout()
         codelayout.addWidget(self.label, 1)
@@ -42,7 +42,7 @@ class NewCodeWindow(QDialog):
 
         buttons = QHBoxLayout()
         buttons.addWidget(self.newButton)
-        buttons.addWidget(self.changeRowButton)
+        buttons.addWidget(self.shuffleButton)
         buttons.addWidget(self.saveButton)
 
         mainlayout = QVBoxLayout()
@@ -64,16 +64,16 @@ class NewCodeWindow(QDialog):
 
         self.setMinimumWidth(350)
 
-    def handleSaveCode(self, event):
+    def handleSave(self, event):
         self.closedDueToSave = True
         self.close()
         self.parent.popUpSaveCodeWindow(self.codeLine.text())
 
-    def handleChangeRow(self, event):
+    def handleShuffle(self, event):
         new_code = Generator.rearange(self.codeLine.text())
         self.codeLine.setText(new_code)
 
-    def handleNewCode(self, event):
+    def handleNew(self, event):
         new_code = Generator.produce_code(self.parent.tab1.getSetup())
         self.codeLine.setText(new_code)
 
