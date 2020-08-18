@@ -11,6 +11,7 @@ from GUI.Windows.MainWindow.MainWindow import MainWindow
 from Database.DatabaseAdministrator import DatabaseAdministrator
 
 
+# test
 def run():
     app = QApplication(sys.argv)
     while True:
