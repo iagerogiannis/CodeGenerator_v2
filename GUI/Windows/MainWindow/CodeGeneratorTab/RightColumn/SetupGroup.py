@@ -65,6 +65,35 @@ class SetupGroup(QGroupBox):
         layout.addLayout(buttons)
         self.setLayout(layout)
 
+    def loadSetupsToCombo(self):
+        file = "{}/{}".format("Database", "setups.json")
+        i = 0
+        for setup in (jsonlib.read_json(file)):
+            if setup["User_id"] == config.db_admin.user_id or setup["User_id"] == 100:
+                self.setupCombo.addItem(setup["Name"], setup["id"])
+                self.setupCombo.setItemData(i, setup["id"], Qt.UserRole + 1)
+                i += 1
+
+    def reflectChange(self):
+
+        if not self.edited:
+            self.edited = True
+            self.addEditedSetup()
+        else:
+            self.setButtonsState("by edit")
+
+    def addEditedSetup(self):
+
+        file = "{}/{}".format("Database", "setups.json")
+        self.original_index = self.setupCombo.currentIndex()
+        edited_id = jsonlib.next_index(file, "id")
+        name = "{} (Edited)".format(self.setupCombo.currentText())
+        self.setupCombo.addItem(name, edited_id)
+        self.setupCombo.setCurrentIndex(self.setupCombo.count() - 1)
+
+    def removeEditedSetup(self):
+        self.setupCombo.removeItem(self.setupCombo.count() - 1)
+
     def setButtonsState(self, comboChangedBy):
 
         def byPress():
@@ -103,15 +132,6 @@ class SetupGroup(QGroupBox):
             byPress()
         elif comboChangedBy == "by edit":
             byEdit()
-
-    def loadSetupsToCombo(self):
-        file = "{}/{}".format("Database", "setups.json")
-        i = 0
-        for setup in (jsonlib.read_json(file)):
-            if setup["User_id"] == config.db_admin.user_id or setup["User_id"] == 100:
-                self.setupCombo.addItem(setup["Name"], setup["id"])
-                self.setupCombo.setItemData(i, setup["id"], Qt.UserRole + 1)
-                i += 1
 
     def radioButtonToggled(self, button):
 
@@ -221,25 +241,3 @@ class SetupGroup(QGroupBox):
         self.setupCombo.setCurrentIndex(0)
         jsonlib.drop_by_id(file, "id", self.setupCombo.itemData(index, Qt.UserRole + 1))
         self.setupCombo.removeItem(index)
-
-    def addEditedSetup(self):
-
-        file = "{}/{}".format("Database", "setups.json")
-        self.original_index = self.setupCombo.currentIndex()
-        edited_id = jsonlib.next_index(file, "id")
-        name = "{} (Edited)".format(self.setupCombo.currentText())
-        self.setupCombo.addItem(name, edited_id)
-        self.setupCombo.setCurrentIndex(self.setupCombo.count() - 1)
-
-    def removeEditedSetup(self):
-        self.setupCombo.removeItem(self.setupCombo.count() - 1)
-
-    @property
-    def edited(self):
-        return self.__edited
-
-    @edited.setter
-    def edited(self, edited):
-        self.__edited = edited
-        if self.__edited:
-            self.addEditedSetup()

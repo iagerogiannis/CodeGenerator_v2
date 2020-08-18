@@ -136,11 +136,8 @@ class CodeGeneratorTab(QWidget):
     def setupEdited(self):
 
         try:
-            if not self.column.setupBox.edited:
-                self.column.setupBox.edited = True
-            else:
-                self.column.setupBox.setButtonsState("by edit")
-            self.column.generatorBox.setButtonsState()
+            self.column.setupBox.reflectChange()
+            self.column.generatorBox.reflectChange()
         except AttributeError:
             pass
 

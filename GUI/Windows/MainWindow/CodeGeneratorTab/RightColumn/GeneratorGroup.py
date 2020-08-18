@@ -65,7 +65,7 @@ class GeneratorGroup(QGroupBox):
             if button.text() == "Update Existing Code":
                 self.code_to_edit.setEnabled(False)
 
-    def setButtonsState(self):
+    def reflectChange(self):
         if not self.central.controlBoard.setupIsProper():
             self.buttonNew.setEnabled(False)
             self.buttonUpdate.setEnabled(False)
