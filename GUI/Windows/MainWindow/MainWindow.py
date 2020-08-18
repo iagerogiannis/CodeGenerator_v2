@@ -12,7 +12,6 @@ from GUI.Windows.ViewAccountWindow.ViewAccountWindow import ViewAccountWindow
 from Generic.Generator import Generator
 
 
-
 class MainWindow(QMainWindow):
 
     def __init__(self):
@@ -58,6 +57,11 @@ class MainWindow(QMainWindow):
             self.saveCodeWindow = SaveCodeWindow(self, password)
         else:
             self.saveCodeWinow = UpdateCodeWindow(self)
+
+    def popUpEditCodeWindow(self, pass_id, account, username, email, password):
+        self.setEnabled(False)
+        self.setWindowOpacity(.5)
+        self.EditCodeWindow = SaveCodeWindow(self, password, pass_id, account, username, email, True)
 
     def popUpAboutWindow(self):
         self.setEnabled(False)

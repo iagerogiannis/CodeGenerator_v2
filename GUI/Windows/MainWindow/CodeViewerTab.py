@@ -115,6 +115,18 @@ class CodeViewerTab(QWidget):
         except AttributeError:
             self.selected_id = None
 
+    def editPassword(self, pass_id, account, username, email, password):
+
+        data = self.getTable()
+        values = [account, username, email, password]
+
+        for i, column in enumerate(['Account', 'Username', 'Email', 'Password']):
+            data.loc[data["ID"] == pass_id, column] = values[i]
+
+        self.clearSelection()
+        self.disableButtons()
+        self.setData(data)
+
     def handleCopy(self):
         pyperclip.copy(self.table.selectedItems()[3].text())
 
@@ -122,10 +134,16 @@ class CodeViewerTab(QWidget):
         pass
 
     def handleEdit(self):
-        if self.table.isColumnHidden(0):
-            self.table.setColumnHidden(0, False)
-        else:
-            self.table.setColumnHidden(0, True)
+
+        i = self.table.currentRow()
+
+        (pass_id, account, username, email, password) = (self.table.item(i, 0).text(),
+                                                         self.table.item(i, 1).text(),
+                                                         self.table.item(i, 2).text(),
+                                                         self.table.item(i, 3).text(),
+                                                         self.table.item(i, 4).text())
+
+        self.parent.popUpEditCodeWindow(pass_id, account, username, email, password)
 
     def handleRemove(self):
 

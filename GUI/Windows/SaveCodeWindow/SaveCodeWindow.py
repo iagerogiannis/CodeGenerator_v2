@@ -9,19 +9,24 @@ import pyperclip
 # noinspection PyCallByClass,PyArgumentList,PyBroadException
 class SaveCodeWindow(QDialog):
 
-    def __init__(self, parent, pass_code):
+    def __init__(self, parent, password_value, pass_id=0, account_value="", username_value="", email_value="", edit=False):
         super().__init__(parent)
         self.parent = parent
-        self.pass_code = pass_code
+        self.pass_id = pass_id
+        self.account_value = account_value
+        self.username_value = username_value
+        self.email_value = email_value
+        self.password_value = password_value
+        self.edit = edit
         self.build_UI()
         self.show()
 
     def build_UI(self):
 
-        self.account = EditField(self, "Account")
-        self.username = EditField(self, "Username")
-        self.email = EditField(self, "Email Address")
-        self.password = EditField(self, "Password", self.pass_code)
+        self.account = EditField(self, "Account", self.account_value)
+        self.username = EditField(self, "Username", self.username_value)
+        self.email = EditField(self, "Email Address", self.email_value)
+        self.password = EditField(self, "Password", self.password_value)
 
         self.saveButton = QPushButton(self)
         self.saveButton.setText("Save")
@@ -58,11 +63,14 @@ class SaveCodeWindow(QDialog):
 
         self.setMinimumWidth(300)
 
-    def closeEvent(self, event):
-        self.parent.setEnabled(True)
-        self.parent.setWindowOpacity(1.)
-
     def handleSave(self):
+
+        if not self.edit:
+            self.saveNewPassword()
+        else:
+            self.saveEditedPassword()
+
+    def saveNewPassword(self):
 
         config.db_admin.addPassword(
             self.account.value,
@@ -71,11 +79,30 @@ class SaveCodeWindow(QDialog):
             self.password.value
         )
 
-        pass_id = str(int(config.db_admin.getLastIndex()))
+        self.pass_id = str(int(config.db_admin.getLastIndex()))
 
-        self.parent.tab2.addPassword(pass_id, self.account.value, self.username.value,
+        self.parent.tab2.addPassword(self.pass_id, self.account.value, self.username.value,
                                      self.email.value, self.password.value)
         QMessageBox.information(self, "Success", "Password registered successfully!")
+        self.close()
+
+    def saveEditedPassword(self):
+
+        config.db_admin.editPassword(
+            self.pass_id,
+            self.account.value,
+            self.username.value,
+            self.email.value,
+            self.password.value
+        )
+
+        self.parent.tab2.editPassword(self.pass_id,
+                                      self.account.value,
+                                      self.username.value,
+                                      self.email.value,
+                                      self.password.value)
+
+        QMessageBox.information(self, "Success", "Password updated successfully!")
         self.close()
 
     def handleCopy(self):
@@ -83,3 +110,7 @@ class SaveCodeWindow(QDialog):
 
     def handleCancel(self):
         self.close()
+
+    def closeEvent(self, event):
+        self.parent.setEnabled(True)
+        self.parent.setWindowOpacity(1.)

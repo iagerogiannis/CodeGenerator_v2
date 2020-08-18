@@ -108,8 +108,9 @@ class DatabaseAdministrator:
 
     def addPassword(self, account, username, email, password):
 
-        def append_salt(pass_id, salt):
-            data = {"password_id": pass_id, "salt": salt}
+        def append_salt():
+            nonlocal salt
+            data = {"password_id": self.getLastIndex(), "salt": salt.decode("utf-8")}
             file = "{}/{}".format("Database", "salts.json")
             jsonlib.append_to_json(data, file)
 
@@ -125,12 +126,35 @@ class DatabaseAdministrator:
                                  self.admin_pass),
                              self.user_id,))
 
+        append_salt()
+
         self.connection.commit()
 
-        append_salt(self.getLastIndex(), salt.decode('utf-8'))
+    def editPassword(self, pass_id, account, username, email, password):
 
-    def editPassword(self):
-        pass
+        def overwrite_salt():
+            nonlocal pass_id, salt
+            file = "{}/{}".format("Database", "salts.json")
+            data = {"password_id": int(pass_id), "salt": salt.decode('utf-8')}
+            jsonlib.overwrite_by_id(file, "password_id", int(pass_id), data)
+
+        salt = sp.generate_salt()
+        overwrite_salt()
+
+        self.cursor.execute("UPDATE password SET account = %s, username = %s, email = %s, password = %s "
+                            "WHERE password_id = %s;",
+                            (sp.aes_encrypt(account, self.admin_pass),
+                             sp.aes_encrypt(username, self.admin_pass),
+                             sp.aes_encrypt(email, self.admin_pass),
+                             sp.aes_encrypt(
+                                 sp.aes_encrypt(password, sp.protected_key_1(self.user_pass, salt)),
+                                 self.admin_pass),
+                             int(pass_id),))
+
+        # self.cursor.execute("SELECT * FROM password WHERE password_id = %s", (int(pass_id),))
+        # print(self.cursor.fetchall())
+
+        self.connection.commit()
 
     def removePassword(self, pass_id):
         self.cursor.execute("DELETE FROM password WHERE password_id = %s;", (pass_id,))
