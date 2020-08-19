@@ -110,13 +110,13 @@ class DatabaseAdministrator:
 
     def addPassword(self, account, username, email, password):
 
-        def append_salt():
-            nonlocal salt
-            data = {"password_id": self.getLastIndex(), "salt": salt.decode("utf-8")}
-            file = "{}/{}".format("Database", "salts.json")
-            jsonlib.append_to_json(data, file)
-
-        salt = sp.generate_salt()
+        # def append_salt():
+        #     nonlocal salt
+        #     data = {"password_id": self.getLastIndex(), "salt": salt.decode("utf-8")}
+        #     file = "{}/{}".format("Database", "salts.json")
+        #     jsonlib.append_to_json(data, file)
+        #
+        # salt = sp.generate_salt()
 
         self.cursor.execute("INSERT INTO password (account, username, email, password, user_id) "
                             "VALUES (%s, %s, %s, %s, %s);",
@@ -149,9 +149,6 @@ class DatabaseAdministrator:
                              sp.aes_encrypt(email, self.admin_pass),
                              sp.aes_encrypt(sp.aes_encrypt(password, self.user_hkey), self.admin_pass),
                              int(pass_id),))
-
-        # self.cursor.execute("SELECT * FROM password WHERE password_id = %s", (int(pass_id),))
-        # print(self.cursor.fetchall())
 
         self.connection.commit()
 
