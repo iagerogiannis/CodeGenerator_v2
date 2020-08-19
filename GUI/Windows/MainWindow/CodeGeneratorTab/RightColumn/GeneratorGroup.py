@@ -6,6 +6,7 @@ class GeneratorGroup(QGroupBox):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.parent = parent
+        self.code_to_edit_data = [None, None, None, None, None]
         self.central = self.parent.parent
         self.centralWindow = self.parent.parent.parent
         self.buildWidget()
@@ -43,7 +44,10 @@ class GeneratorGroup(QGroupBox):
         self.setLayout(layout)
 
     def handleGenerateCode(self, event):
-        self.centralWindow.popUpNewCodeWindow()
+        if self.buttonNew.isChecked():
+            self.centralWindow.popUpNewCodeWindow()
+        elif self.buttonUpdate.isChecked():
+            self.centralWindow.popUpUpdateCodeWindow(*self.code_to_edit_data)
 
     def resetRadioButtons(self):
 
@@ -56,16 +60,19 @@ class GeneratorGroup(QGroupBox):
 
         if button.isChecked():
             if button.text() == "Create New Code":
-                self.generatorButton.setEnabled(True)
+                self.code_to_edit_data = [None, None, None, None, None]
+                self.code_to_edit.setText("(Select Code from View Tab)")
                 self.code_to_edit.setEnabled(False)
+                self.generatorButton.setEnabled(True)
             elif button.text() == "Update Existing Code":
                 self.generatorButton.setEnabled(False)
                 self.code_to_edit.setEnabled(True)
+                self.central.parent.switchToTab(1)
         else:
             if button.text() == "Update Existing Code":
                 self.code_to_edit.setEnabled(False)
 
-    def setButtonsState(self):
+    def reflectChange(self):
         if not self.central.controlBoard.setupIsProper():
             self.buttonNew.setEnabled(False)
             self.buttonUpdate.setEnabled(False)
@@ -78,3 +85,17 @@ class GeneratorGroup(QGroupBox):
                 self.generatorButton.setEnabled(True)
             if self.buttonUpdate.isChecked():
                 self.code_to_edit.setEnabled(True)
+
+    def resetButtons(self):
+        self.code_to_edit.setText("(Select Code from View Tab)")
+        self.resetRadioButtons()
+        self.generatorButton.setEnabled(False)
+
+    def choseCodeToUpdate(self, pass_id, account, username, email, password):
+
+        self.code_to_edit_data = [pass_id, account, username, email, password]
+        self.buttonUpdate.setChecked(True)
+        self.code_to_edit.setText("{}; {}; {};".format(account, username, email))
+        self.code_to_edit.setCursorPosition(0)
+        self.central.parent.switchToTab(0)
+        self.generatorButton.setEnabled(True)

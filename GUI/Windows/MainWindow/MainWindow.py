@@ -1,5 +1,5 @@
 import sys
-from PyQt4.QtGui import QMainWindow, QIcon, QTabWidget
+from PyQt4.QtGui import QMainWindow, QIcon, QTabWidget, QDialog
 
 from GUI.Windows.AboutWindow import AboutWindow
 from GUI.Windows.MainWindow.CodeGeneratorTab.CodeGeneratorTab import CodeGeneratorTab
@@ -10,7 +10,6 @@ from GUI.Windows.SaveCodeWindow.SaveCodeWindow import SaveCodeWindow
 from GUI.Windows.UpdateCodeWindow.UpdateCodeWindow import UpdateCodeWindow
 from GUI.Windows.ViewAccountWindow.ViewAccountWindow import ViewAccountWindow
 from Generic.Generator import Generator
-
 
 
 class MainWindow(QMainWindow):
@@ -39,29 +38,41 @@ class MainWindow(QMainWindow):
 
         self.show()
 
-    def popUpNewCodeWindow(self):
+    def switchToTab(self, index):
+        self.tabs.setCurrentIndex(index)
+
+    def popUp(self):
         self.setEnabled(False)
         self.setWindowOpacity(.5)
-        new_code = Generator.produce_code(self.tab1.getSetup())
-        self.newCodeWindow = NewCodeWindow(self, new_code)
 
     def popUpViewAccountWindow(self):
-        self.setEnabled(False)
-        self.setWindowOpacity(.5)
+        self.popUp()
         self.viewAccountWindow = ViewAccountWindow(self)
 
-    def popUpSaveCodeWindow(self, password):
-        self.setEnabled(False)
-        self.setWindowOpacity(.5)
-        a = True
-        if a:
-            self.saveCodeWindow = SaveCodeWindow(self, password)
-        else:
-            self.saveCodeWinow = UpdateCodeWindow(self)
+    def popUpNewCodeWindow(self):
+        self.password = ""
+        self.popUp()
+        new_code = Generator.produce_code(self.tab1.getSetup())
+        self.newCodeWindow = NewCodeWindow(self, new_code)
+        if self.newCodeWindow.exec_() == QDialog.Accepted:
+            self.saveCodeWindow = SaveCodeWindow(self, self.password)
+
+    def popUpUpdateCodeWindow(self, pass_id, account, username, email, old_password):
+        self.password = ""
+        self.popUp()
+        new_code = Generator.produce_code(self.tab1.getSetup())
+        self.newCodeWindow = NewCodeWindow(self, new_code)
+        if self.newCodeWindow.exec_() == QDialog.Accepted:
+            self.updateCodeWindow = UpdateCodeWindow(self, pass_id, account, username, email, old_password,
+                                                     self.password)
+        self.tab1.column.generatorBox.resetButtons()
+
+    def popUpEditCodeWindow(self, pass_id, account, username, email, password):
+        self.popUp()
+        self.EditCodeWindow = SaveCodeWindow(self, password, pass_id, account, username, email, True)
 
     def popUpAboutWindow(self):
-        self.setEnabled(False)
-        self.setWindowOpacity(.5)
+        self.popUp()
         self.aboutWindow = AboutWindow(self)
 
     def logOut(self):

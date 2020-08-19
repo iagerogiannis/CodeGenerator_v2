@@ -1,13 +1,20 @@
-from PyQt4.QtGui import QDialog, QPushButton, QHBoxLayout, QVBoxLayout, QLabel
+from PyQt4.QtGui import QDialog, QPushButton, QHBoxLayout, QVBoxLayout, QLabel, QMessageBox
 
 from GUI.Windows.UpdateCodeWindow.EditFieldCopyable import EditFieldCopyable
 
+import config
 
 class UpdateCodeWindow(QDialog):
 
-    def __init__(self, parent):
+    def __init__(self, parent, pass_id, account, username, email, old_password, new_password):
         super().__init__(parent)
         self.parent = parent
+        self.pass_id = pass_id
+        self.account_value = account
+        self.username_value = username
+        self.email_value = email
+        self.old_password_value = old_password
+        self.new_password_value = new_password
         self.build_UI()
         self.show()
 
@@ -19,10 +26,18 @@ class UpdateCodeWindow(QDialog):
         self.oldPassword = EditFieldCopyable(self, "Old Password")
         self.newPassword = EditFieldCopyable(self, "New Password")
 
+        self.account.setValue(self.account_value)
+        self.username.setValue(self.username_value)
+        self.email.setValue(self.email_value)
+        self.oldPassword.setValue(self.old_password_value)
+        self.newPassword.setValue(self.new_password_value)
+
         self.saveButton = QPushButton(self)
+        self.saveButton.clicked.connect(self.handleSave)
         self.saveButton.setText("Save")
 
         self.cancelButton = QPushButton(self)
+        self.cancelButton.clicked.connect(self.handleCancel)
         self.cancelButton.setText("Cancel")
 
         self.space = QLabel(self)
@@ -51,6 +66,28 @@ class UpdateCodeWindow(QDialog):
         self.setLayout(layout)
 
         self.setMinimumWidth(370)
+
+    def handleSave(self):
+
+        config.db_admin.editPassword(
+            self.pass_id,
+            self.account.value,
+            self.username.value,
+            self.email.value,
+            self.newPassword.value
+        )
+
+        self.parent.tab2.editPassword(self.pass_id,
+                                      self.account.value,
+                                      self.username.value,
+                                      self.email.value,
+                                      self.newPassword.value)
+
+        QMessageBox.information(self, "Success", "Password updated successfully!")
+        self.close()
+
+    def handleCancel(self):
+        self.close()
 
     def closeEvent(self, event):
             self.parent.setEnabled(True)
