@@ -84,8 +84,7 @@ class MainMenu:
                                                               filter="JSON Files (*.json)")
         if filename[0] != '':
             jsonlib.export_data(data, filename[0])
-
-        QMessageBox.information(self.parent, "Success", "Codes File Exported successfully!")
+            QMessageBox.information(self.parent, "Success", "Codes File Exported successfully!")
 
     def handleImportFile(self):
         filename = QFileDialog.getOpenFileNameAndFilter(self.parent, 'Import Codes File',
@@ -96,5 +95,4 @@ class MainMenu:
                 config.db_admin.addPassword(*codes_data.iloc[[i]].values.tolist()[0])
                 pass_id = str(int(config.db_admin.getLastIndex()))
                 self.parent.tab2.addPassword(pass_id, *codes_data.iloc[[i]].values.tolist()[0])
-
-        QMessageBox.information(self.parent, "Success", "Codes File Imported successfully!")
+            QMessageBox.information(self.parent, "Success", "Codes File Imported successfully!")

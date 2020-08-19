@@ -6,7 +6,8 @@ import bcrypt
 
 class SecurityProtocol:
     bcrypt_cost = 12
-    padding_character = bytes(chr(7).encode('utf-8'))
+    ascii_value = 7
+    padding_character = bytes(chr(ascii_value).encode('utf-8'))
     aes_block_size = 16
     aes_mode = AES.MODE_CBC
 
@@ -55,12 +56,15 @@ class SecurityProtocol:
     def aes_encrypt(cls, data, key):
         def pad(s):
             return s + cls.padding_character * (cls.aes_block_size - len(s) % cls.aes_block_size)
-        iv = Random.new().read(cls.aes_block_size)
-        cipher = AES.new(cls.hkey(key), cls.aes_mode, iv)
-        if isinstance(data, str):
-            return iv + cipher.encrypt(pad(data.encode("utf-8")))
-        elif isinstance(data, bytes):
-            return iv + cipher.encrypt(pad(data))
+        result = cls.padding_character
+        while result[-1] == cls.ascii_value:
+            iv = Random.new().read(cls.aes_block_size)
+            cipher = AES.new(cls.hkey(key), cls.aes_mode, iv)
+            if isinstance(data, str):
+                result = iv + cipher.encrypt(pad(data.encode("utf-8")))
+            elif isinstance(data, bytes):
+                result = iv + cipher.encrypt(pad(data))
+        return result
 
     @classmethod
     def aes_decrypt(cls, data, key, decode=True):
