@@ -38,6 +38,7 @@ class DatabaseAdministrator:
     def userLogin(self, user_id, user_pass):
         self.user_id = int(user_id)
         self.user_pass = user_pass
+        self.user_hkey = sp.en_hash(self.user_pass)
 
     def getAllUsers(self):
 
@@ -109,13 +110,13 @@ class DatabaseAdministrator:
 
     def addPassword(self, account, username, email, password):
 
-        def append_salt():
-            nonlocal salt
-            data = {"password_id": self.getLastIndex(), "salt": salt.decode("utf-8")}
-            file = "{}/{}".format("Database", "salts.json")
-            jsonlib.append_to_json(data, file)
-
-        salt = sp.generate_salt()
+        # def append_salt():
+        #     nonlocal salt
+        #     data = {"password_id": self.getLastIndex(), "salt": salt.decode("utf-8")}
+        #     file = "{}/{}".format("Database", "salts.json")
+        #     jsonlib.append_to_json(data, file)
+        #
+        # salt = sp.generate_salt()
 
         self.cursor.execute("INSERT INTO password (account, username, email, password, user_id) "
                             "VALUES (%s, %s, %s, %s, %s);",
@@ -123,37 +124,31 @@ class DatabaseAdministrator:
                              sp.aes_encrypt(username, self.admin_pass),
                              sp.aes_encrypt(email, self.admin_pass),
                              sp.aes_encrypt(
-                                 sp.aes_encrypt(password, sp.protected_key_1(self.user_pass, salt)),
-                                 self.admin_pass),
+                                 sp.aes_encrypt(password, self.user_hkey), self.admin_pass),
                              self.user_id,))
 
-        append_salt()
+        # append_salt()
 
         self.connection.commit()
 
     def editPassword(self, pass_id, account, username, email, password):
 
-        def overwrite_salt():
-            nonlocal pass_id, salt
-            file = "{}/{}".format("Database", "salts.json")
-            data = {"password_id": int(pass_id), "salt": salt.decode('utf-8')}
-            jsonlib.overwrite_by_id(file, "password_id", int(pass_id), data)
+        # def overwrite_salt():
+        #     nonlocal pass_id
+        #     file = "{}/{}".format("Database", "salts.json")
+        #     data = {"password_id": int(pass_id), "salt": salt.decode('utf-8')}
+        #     jsonlib.overwrite_by_id(file, "password_id", int(pass_id), data)
 
-        salt = sp.generate_salt()
-        overwrite_salt()
+        # salt = sp.generate_salt()
+        # overwrite_salt()
 
         self.cursor.execute("UPDATE password SET account = %s, username = %s, email = %s, password = %s "
                             "WHERE password_id = %s;",
                             (sp.aes_encrypt(account, self.admin_pass),
                              sp.aes_encrypt(username, self.admin_pass),
                              sp.aes_encrypt(email, self.admin_pass),
-                             sp.aes_encrypt(
-                                 sp.aes_encrypt(password, sp.protected_key_1(self.user_pass, salt)),
-                                 self.admin_pass),
+                             sp.aes_encrypt(sp.aes_encrypt(password, self.user_hkey), self.admin_pass),
                              int(pass_id),))
-
-        # self.cursor.execute("SELECT * FROM password WHERE password_id = %s", (int(pass_id),))
-        # print(self.cursor.fetchall())
 
         self.connection.commit()
 
@@ -163,9 +158,9 @@ class DatabaseAdministrator:
 
     def getPasswords(self):
 
-        def getSalt(password):
-            file = "{}/{}".format("Database", "salts.json")
-            return jsonlib.locate_by_id(file, "password_id", int(password[0]))["salt"]
+        # def getSalt(password):
+        #     file = "{}/{}".format("Database", "salts.json")
+        #     return jsonlib.locate_by_id(file, "password_id", int(password[0]))["salt"]
 
         self.cursor.execute("SELECT * FROM password WHERE user_id = %s", (self.user_id,))
         passwords = self.cursor.fetchall()
@@ -175,8 +170,7 @@ class DatabaseAdministrator:
                           "Username": [sp.aes_decrypt(password[2], self.admin_pass) for password in passwords],
                           "Email": [sp.aes_decrypt(password[3], self.admin_pass) for password in passwords],
                           "Password": [sp.aes_decrypt(sp.aes_decrypt(password[4], self.admin_pass, decode=False),
-                                                       sp.protected_key_1(self.user_pass,
-                                                                          getSalt(password).encode('utf-8')))
+                                                      self.user_hkey)
                                        for password in passwords]
                           })
 
