@@ -65,9 +65,8 @@ class NewCodeWindow(QDialog):
         self.setMinimumWidth(350)
 
     def handleSave(self, event):
-        self.closedDueToSave = True
-        self.close()
-        self.parent.popUpSaveCodeWindow(self.codeLine.text())
+        self.parent.password = self.codeLine.text()
+        self.accept()
 
     def handleShuffle(self, event):
         new_code = Generator.rearange(self.codeLine.text())
@@ -79,5 +78,4 @@ class NewCodeWindow(QDialog):
 
     def closeEvent(self, event):
         self.parent.setEnabled(True)
-        if not self.closedDueToSave:
-            self.parent.setWindowOpacity(1.)
+        self.parent.setWindowOpacity(1.)
