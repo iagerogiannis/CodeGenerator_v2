@@ -58,6 +58,16 @@ class DatabaseAdministrator:
         else:
             return None
 
+    def getUserData(self):
+        self.cursor.execute("SELECT username, email FROM user WHERE user_id=%s", (int(self.user_id),))
+        username, email = self.cursor.fetchone()
+        return sp.aes_decrypt(username, self.admin_pass), sp.aes_decrypt(email, self.admin_pass)
+
+    def editUserData(self, data, value):
+
+        self.cursor.execute("UPDATE user SET %s = %s WHERE password_id = %s;",
+                            (data, sp.aes_encrypt(value, self.admin_pass), int(self.user_id),))
+
     def attemptLogin(self, username, password):
 
         user_id = self.getUser(username)
@@ -71,7 +81,7 @@ class DatabaseAdministrator:
 
         return False
 
-    def createAccount(self, username, email, password):
+    def createUser(self, username, email, password):
 
         if username == "":
             raise EmptyUsernameError()
@@ -94,17 +104,8 @@ class DatabaseAdministrator:
 
         self.connection.commit()
 
-    def addSetup(self):
-        pass
-
-    def editSetup(self):
-        pass
-
-    def removeSetup(self):
-        pass
-
-    def getSetups(self):
-        pass
+    def removeUser(self):
+        print("Remove User")
 
     def addPassword(self, account, username, email, password):
 

@@ -3,6 +3,8 @@ from PyQt4.QtGui import QWidget, QHBoxLayout, QLabel
 
 from GUI.Components.ClickableTextLabel import ClickableTextLabel
 
+import config
+
 
 class RemoveAccountField(QWidget):
 
@@ -16,6 +18,7 @@ class RemoveAccountField(QWidget):
 
         self.text = ClickableTextLabel(self, "Remove Account")
         self.text.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.text.mousePressEvent = self.handleRemoveAccount
 
         layout = QHBoxLayout()
 
@@ -23,3 +26,6 @@ class RemoveAccountField(QWidget):
         layout.addWidget(self.text, 1)
 
         self.setLayout(layout)
+
+    def handleRemoveAccount(self, event):
+        config.db_admin.removeUser()
