@@ -5,10 +5,11 @@ from GUI.Components.ClickableTextLabel import ClickableTextLabel
 
 class InfoField(QWidget):
 
-    def __init__(self, parent, title, value):
+    def __init__(self, parent, title, value, editEvent=None):
         super().__init__(parent)
         self.title = title
         self.value = value
+        self.editEvent = editEvent
         self.buildUI()
 
     def buildUI(self):
@@ -20,7 +21,7 @@ class InfoField(QWidget):
         self.valueLabel.setText(self.value)
         self.valueLabel.setStyleSheet("font-weight: bold;")
 
-        self.editLabel = ClickableTextLabel(self, "Edit")
+        self.editLabel = ClickableTextLabel(self, "Edit", self.editEvent)
 
         layout = QHBoxLayout()
 
@@ -29,6 +30,3 @@ class InfoField(QWidget):
         layout.addWidget(self.editLabel, 1)
 
         self.setLayout(layout)
-
-    def handleClickEdit(self, event):
-        print("clicked")

@@ -5,7 +5,7 @@ import bcrypt
 
 
 class SecurityProtocol:
-    bcrypt_cost = 10
+    bcrypt_cost = 12
     padding_character = bytes(chr(7).encode('utf-8'))
     aes_block_size = 16
     aes_mode = AES.MODE_CBC

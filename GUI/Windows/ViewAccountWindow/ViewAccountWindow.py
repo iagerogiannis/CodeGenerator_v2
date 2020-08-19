@@ -4,6 +4,8 @@ from PyQt4.QtGui import QDialog, QPixmap, QVBoxLayout, QIcon, QLabel
 from GUI.Windows.ViewAccountWindow.InfoField import InfoField
 from GUI.Windows.ViewAccountWindow.RemoveAccountField import RemoveAccountField
 
+import config
+
 
 # # noinspection PyCallByClass,PyArgumentList
 class ViewAccountWindow(QDialog):
@@ -11,6 +13,7 @@ class ViewAccountWindow(QDialog):
     def __init__(self, parent):
         super().__init__(parent)
         self.parent = parent
+        self.username_value, self.email_value = config.db_admin.getUserData()
         self.build_UI()
         self.show()
 
@@ -31,9 +34,9 @@ class ViewAccountWindow(QDialog):
         title.setMargin(10)
 
         # Labels -------------------------------------------------------------------------------------------------------
-        self.username = InfoField(self, "Username", "iagerogiannis")
-        self.email = InfoField(self, "Email Address", "iagerogiannis@gmail.com")
-        self.password = InfoField(self, "Password", "************")
+        self.username = InfoField(self, "Username", self.username_value, self.handleEdit)
+        self.email = InfoField(self, "Email Address", self.email_value, self.handleEdit)
+        self.password = InfoField(self, "Password", "************", self.handleEdit)
         self.remove = RemoveAccountField(self)
 
         # Total Layout -------------------------------------------------------------------------------------------------
@@ -52,6 +55,9 @@ class ViewAccountWindow(QDialog):
         self.setWindowTitle("Code Generator")
         self.setWindowIcon(QIcon("Files/app.ico"))
         self.setFixedSize(350, 410)
+
+    def handleEdit(self, event):
+        pass
 
     def closeEvent(self, event):
         self.parent.setEnabled(True)

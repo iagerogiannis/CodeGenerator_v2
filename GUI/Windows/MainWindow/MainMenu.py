@@ -1,9 +1,12 @@
-from PyQt4 import QtGui
+from PyQt4.QtGui import QMainWindow, QMessageBox, QAction, QFileDialog
+
+import config
+from Generic.MyJsonLib import MyJsonLib as jsonlib
 
 
 class MainMenu:
 
-    def __init__(self, parent: QtGui.QMainWindow):
+    def __init__(self, parent: QMainWindow):
         super().__init__()
         self.parent = parent
         self.centralWindow = self.parent
@@ -17,11 +20,13 @@ class MainMenu:
 
             fileMenu = mainMenu.addMenu("File")
 
-            ImportCodesAction = QtGui.QAction("Import Codes File", self.parent)
+            ImportCodesAction = QAction("Import Codes File", self.parent)
             ImportCodesAction.setStatusTip("")
+            ImportCodesAction.triggered.connect(self.handleImportFile)
 
-            ExportCodesAction = QtGui.QAction("Export Codes File", self.parent)
+            ExportCodesAction = QAction("Export Codes File", self.parent)
             ExportCodesAction.setStatusTip("")
+            ExportCodesAction.triggered.connect(self.handleExportFile)
 
             fileMenu.addAction(ImportCodesAction)
             fileMenu.addAction(ExportCodesAction)
@@ -32,11 +37,11 @@ class MainMenu:
 
             accountMenu = mainMenu.addMenu("Account")
 
-            ViewAccountAction = QtGui.QAction("View", self.parent)
+            ViewAccountAction = QAction("View", self.parent)
             ViewAccountAction.setStatusTip("")
             ViewAccountAction.triggered.connect(self.handleViewAccount)
 
-            LogOutAction = QtGui.QAction("Log Out", self.parent)
+            LogOutAction = QAction("Log Out", self.parent)
             LogOutAction.setStatusTip("")
             LogOutAction.triggered.connect(self.handleLogOut)
 
@@ -49,7 +54,7 @@ class MainMenu:
 
             helpMenu = mainMenu.addMenu("Help")
 
-            aboutAction = QtGui.QAction("About", self.parent)
+            aboutAction = QAction("About", self.parent)
             aboutAction.setStatusTip("Shows information about Code Generator")
             aboutAction.triggered.connect(self.handleAbout)
 
@@ -72,3 +77,24 @@ class MainMenu:
 
     def handleLogOut(self):
         self.parent.logOut()
+
+    def handleExportFile(self):
+        data = self.parent.tab2.getTable().drop(["ID"], axis=1)
+        filename = QFileDialog.getSaveFileNameAndFilter(self.parent, 'Export Codes File', 'CodesFile',
+                                                              filter="JSON Files (*.json)")
+        if filename[0] != '':
+            jsonlib.export_data(data, filename[0])
+
+        QMessageBox.information(self.parent, "Success", "Codes File Exported successfully!")
+
+    def handleImportFile(self):
+        filename = QFileDialog.getOpenFileNameAndFilter(self.parent, 'Import Codes File',
+                                                              filter="JSON Files (*.json)")
+        if filename[0] != '':
+            codes_data = jsonlib.import_data(filename[0])
+            for i in range(codes_data.shape[0]):
+                config.db_admin.addPassword(*codes_data.iloc[[i]].values.tolist()[0])
+                pass_id = str(int(config.db_admin.getLastIndex()))
+                self.parent.tab2.addPassword(pass_id, *codes_data.iloc[[i]].values.tolist()[0])
+
+        QMessageBox.information(self.parent, "Success", "Codes File Imported successfully!")

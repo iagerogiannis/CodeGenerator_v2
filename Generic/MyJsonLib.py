@@ -1,3 +1,4 @@
+import pandas as pd
 import json
 
 
@@ -56,3 +57,12 @@ class MyJsonLib:
         file_data = cls.read_json(file)
         file_data[index] = new_data
         cls.write_data(file_data, file)
+
+    @classmethod
+    def export_data(cls, data, file):
+        data.to_json(file, orient="records")
+        cls.write_data(cls.read_json(file), file)
+
+    @classmethod
+    def import_data(cls, file):
+        return pd.read_json(file, orient="records")

@@ -80,7 +80,7 @@ class NewUserWindow(QDialog):
 
         if self.password.getText() == self.confirm_password.getText():
             try:
-                config.db_admin.createAccount(self.username.getText(), self.email.getText(), self.password.getText())
+                config.db_admin.createUser(self.username.getText(), self.email.getText(), self.password.getText())
                 QMessageBox.information(self, "Success", "User created successfully!")
                 self.close()
             except EmptyUsernameError:
