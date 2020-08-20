@@ -45,3 +45,7 @@ class MyLineEdit(QLineEdit):
             return ""
         else:
             return self.text()
+
+    def clearText(self):
+        self.setText("a")
+        self.backspace()

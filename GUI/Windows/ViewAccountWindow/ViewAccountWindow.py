@@ -34,9 +34,9 @@ class ViewAccountWindow(QDialog):
         title.setMargin(10)
 
         # Labels -------------------------------------------------------------------------------------------------------
-        self.username = InfoField(self, "Username", self.username_value, self.handleEdit)
-        self.email = InfoField(self, "Email Address", self.email_value, self.handleEdit)
-        self.password = InfoField(self, "Password", "************", self.handleEdit)
+        self.username = InfoField(self, "Username", self.username_value)
+        self.email = InfoField(self, "Email Address", self.email_value)
+        self.password = InfoField(self, "Password", "************")
         self.remove = RemoveAccountField(self)
 
         # Total Layout -------------------------------------------------------------------------------------------------
@@ -54,10 +54,7 @@ class ViewAccountWindow(QDialog):
         layout.setMargin(20)
         self.setWindowTitle("Code Generator")
         self.setWindowIcon(QIcon("Files/app.ico"))
-        self.setFixedSize(350, 410)
-
-    def handleEdit(self, event):
-        pass
+        self.setFixedSize(350, 435)
 
     def closeEvent(self, event):
         self.parent.setEnabled(True)

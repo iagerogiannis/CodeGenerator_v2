@@ -1,4 +1,5 @@
 from PyQt4.QtGui import QDialog, QPushButton, QHBoxLayout, QVBoxLayout, QMessageBox
+from Errors.DatabaseErrors import *
 
 from GUI.Windows.SaveCodeWindow.EditField import EditField
 import config
@@ -72,38 +73,52 @@ class SaveCodeWindow(QDialog):
 
     def saveNewPassword(self):
 
-        config.db_admin.addPassword(
-            self.account.value,
-            self.username.value,
-            self.email.value,
-            self.password.value
-        )
+        try:
+            config.db_admin.addPassword(
+                self.account.value,
+                self.username.value,
+                self.email.value,
+                self.password.value
+            )
 
-        self.pass_id = str(int(config.db_admin.getLastIndex()))
+            self.pass_id = str(int(config.db_admin.getLastIndex()))
 
-        self.parent.tab2.addPassword(self.pass_id, self.account.value, self.username.value,
-                                     self.email.value, self.password.value)
-        QMessageBox.information(self, "Success", "Password registered successfully!")
-        self.close()
+            self.parent.tab2.addPassword(self.pass_id, self.account.value, self.username.value,
+                                         self.email.value, self.password.value)
+            QMessageBox.information(self, "Success", "Password registered successfully!")
+            self.close()
+        except PassAccountLengthError:
+            QMessageBox.warning(self, "Error", "Account must contain between 4 and 48 characters!")
+        except PassUsernameLengthError:
+            QMessageBox.warning(self, "Error", "Username must contain less than 48 characters!")
+        except PassEmailLengthError:
+            QMessageBox.warning(self, "Error", "Email must contain less than 48 characters!")
 
     def saveEditedPassword(self):
 
-        config.db_admin.editPassword(
-            self.pass_id,
-            self.account.value,
-            self.username.value,
-            self.email.value,
-            self.password.value
-        )
+        try:
+            config.db_admin.editPassword(
+                self.pass_id,
+                self.account.value,
+                self.username.value,
+                self.email.value,
+                self.password.value
+            )
 
-        self.parent.tab2.editPassword(self.pass_id,
-                                      self.account.value,
-                                      self.username.value,
-                                      self.email.value,
-                                      self.password.value)
+            self.parent.tab2.editPassword(self.pass_id,
+                                          self.account.value,
+                                          self.username.value,
+                                          self.email.value,
+                                          self.password.value)
 
-        QMessageBox.information(self, "Success", "Password updated successfully!")
-        self.close()
+            QMessageBox.information(self, "Success", "Password updated successfully!")
+            self.close()
+        except PassAccountLengthError:
+            QMessageBox.warning(self, "Error", "Account must contain between 4 and 48 characters!")
+        except PassUsernameLengthError:
+            QMessageBox.warning(self, "Error", "Username must contain less than 48 characters!")
+        except PassEmailLengthError:
+            QMessageBox.warning(self, "Error", "Email must contain less than 48 characters!")
 
     def handleCopy(self):
         pyperclip.copy(self.password.value)

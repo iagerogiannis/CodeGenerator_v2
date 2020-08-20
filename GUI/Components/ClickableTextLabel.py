@@ -4,19 +4,13 @@ from PyQt4.QtGui import QLabel
 
 class ClickableTextLabel(QLabel):
 
-    def __init__(self, parent, text, handleClickEdit=None):
+    def __init__(self, parent, initial_text, handleClickEvent=None):
         super().__init__(parent)
-        self.text = text
-        self.handleClickEdit = handleClickEdit
-        self.buildUI()
-
-    def buildUI(self):
-
-        self.setText(self.text)
+        self.setText(initial_text)
         self.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.setStyleSheet("color: blue;")
         self.enableMouseHover()
-        self.mousePressEvent = self.handleClickEdit
+        self.mousePressEvent = handleClickEvent
 
     def enableMouseHover(self):
         self.setMouseTracking(True)

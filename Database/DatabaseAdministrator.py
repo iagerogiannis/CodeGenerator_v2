@@ -7,6 +7,7 @@ from Database.SecurityProtocol import SecurityProtocol as sp
 from Errors.DatabaseErrors import *
 from Generic.MyJsonLib import MyJsonLib as jsonlib
 from Generic.Generator import Generator as gen
+from GUI.Windows.ConfirmWindow import ConfirmWindow
 
 
 class DatabaseAdministrator:
@@ -39,7 +40,6 @@ class DatabaseAdministrator:
     def userLogin(self, user_id, user_pass):
         self.user_id = int(user_id)
         self.user_pass = user_pass
-        self.user_hkey = sp.en_hash(self.user_pass)
 
     def getAllUsers(self):
 
@@ -65,10 +65,14 @@ class DatabaseAdministrator:
         username, email = self.cursor.fetchone()
         return sp.aes_decrypt(username, self.admin_pass), sp.aes_decrypt(email, self.admin_pass)
 
-    def editUserData(self, data, value):
+    def validatePassword(self, password):
 
-        self.cursor.execute("UPDATE user SET %s = %s WHERE password_id = %s;",
-                            (data, sp.aes_encrypt(value, self.admin_pass), int(self.user_id),))
+        self.cursor.execute("SELECT password FROM user WHERE user_id = {};".format(int(self.user_id)))
+        pass_decrypted = sp.aes_decrypt(self.cursor.fetchone()[0], self.admin_pass)
+        if sp.key2_is_correct(password, pass_decrypted):
+            return True
+        else:
+            return False
 
     def attemptLogin(self, username, password):
 
@@ -98,6 +102,15 @@ class DatabaseAdministrator:
         if not users.dropna().empty and True in list(users["email"].isin([email])):
             raise EmailUsedError()
 
+        if len(username) > 48 or len(username) < 6:
+            raise UsernameLengthError
+
+        if len(email) > 48:
+            raise EmailLengthError
+
+        if len(password) > 48 or len(password) < 6:
+            raise PasswordLengthError
+
         # Create user
         self.cursor.execute("INSERT INTO user (username, email, password) VALUES (%s, %s, %s);",
                             (sp.aes_encrypt(username, self.admin_pass),
@@ -106,8 +119,116 @@ class DatabaseAdministrator:
 
         self.connection.commit()
 
+    def editUser(self, data, value):
+
+        def username_query():
+            nonlocal data, value
+            self.cursor.execute("UPDATE user SET username = %s WHERE user_id = %s;",
+                                (sp.aes_encrypt(value, self.admin_pass), int(self.user_id),))
+
+        def email_query():
+            nonlocal data, value
+            self.cursor.execute("UPDATE user SET email = %s WHERE user_id = %s;",
+                                (sp.aes_encrypt(value, self.admin_pass), int(self.user_id),))
+
+        def password_query():
+            nonlocal data, value
+            self.cursor.execute("UPDATE user SET password = %s WHERE user_id = %s;",
+                                (sp.aes_encrypt(sp.protected_key_2(value), self.admin_pass),
+                                 int(self.user_id),))
+
+        def edit_password_by_id(pass_id):
+            nonlocal value
+
+            def generate_salt():
+                nonlocal setup
+                return gen.produce_code(setup)
+
+            def get_salt():
+                nonlocal salts_file, pass_id
+                return jsonlib.locate_by_id(salts_file, "password_id", pass_id)["salt"]
+
+            def overwrite_salt():
+                nonlocal pass_id, salts_file, salt
+                salt_data = {"password_id": int(pass_id), "salt": salt}
+                jsonlib.overwrite_by_id(salts_file, "password_id", int(pass_id), salt_data)
+
+            def get_password():
+                nonlocal pass_id
+                self.cursor.execute("SELECT password FROM password WHERE password_id = %s;", (int(pass_id),))
+                return sp.aes_decrypt(sp.aes_decrypt(self.cursor.fetchone()[0], self.admin_pass, decode=False),
+                                      sp.protected_key_1(self.user_pass, get_salt()))
+
+            def edit_password():
+                nonlocal pass_id, salt
+                password = get_password()
+                self.cursor.execute("UPDATE password SET password = %s WHERE password_id = %s;",
+                                    (sp.aes_encrypt(sp.aes_encrypt(password, sp.protected_key_1(value, salt)),
+                                                    self.admin_pass),
+                                     int(pass_id),))
+                self.connection.commit()
+
+            salts_file = "{}/{}".format("Database", "salts.json")
+            setups_file = "{}/{}".format("Database", "setups.json")
+            setup = jsonlib.read_json(setups_file)[0]
+
+            salt = generate_salt()
+            edit_password()
+            overwrite_salt()
+
+        def get_password_ids():
+            self.cursor.execute("SELECT password_id FROM password WHERE user_id = %s;", (int(self.user_id), ))
+            return [int(id_value[0]) for id_value in self.cursor.fetchall()]
+
+        if data == "username":
+            username_query()
+        elif data == "email":
+            email_query()
+        elif data == "password":
+            for password_id in get_password_ids():
+                edit_password_by_id(password_id)
+            password_query()
+            self.user_pass = value
+
+        self.connection.commit()
+
+    def checkUserData(self, data, value):
+
+        if data == "username":
+            if value == "":
+                raise EmptyUsernameError()
+            if not match("^[A-Za-z0-9_-]*$", value):
+                raise InvalidCharactersInUsernameError()
+            users = self.getAllUsers()
+            if not users.dropna().empty and True in list(users["username"].isin([value])):
+                raise UsernameUsedError()
+            if len(value) > 48 or len(value) < 6:
+                raise UsernameLengthError
+
+        elif data == "email":
+            users = self.getAllUsers()
+            if not users.dropna().empty and True in list(users["email"].isin([value])):
+                raise EmailUsedError()
+            if len(value) > 48 or len(value) < 6:
+                raise EmailLengthError
+
+        elif data == "password":
+            if len(value) > 48 or len(value) < 6:
+                raise PasswordLengthError
+
     def removeUser(self):
         print("Remove User")
+
+    def checkPasswordEntry(self, account, username, email):
+
+        if len(account) > 48 or len(account) < 2:
+            raise PassAccountLengthError
+
+        if len(username) > 48:
+            raise PassUsernameLengthError
+
+        if len(email) > 48:
+            raise PassEmailLengthError
 
     def addPassword(self, account, username, email, password):
 
@@ -122,6 +243,7 @@ class DatabaseAdministrator:
             file = "{}/{}".format("Database", "salts.json")
             jsonlib.append_to_json(data, file)
 
+        self.checkPasswordEntry(account, username, email)
         salt = generate_salt()
 
         self.cursor.execute("INSERT INTO password (account, username, email, password, user_id) "
@@ -152,6 +274,7 @@ class DatabaseAdministrator:
             data = {"password_id": int(pass_id), "salt": salt}
             jsonlib.overwrite_by_id(file, "password_id", int(pass_id), data)
 
+        self.checkPasswordEntry(account, username, email)
         salt = generate_salt()
         overwrite_salt()
 

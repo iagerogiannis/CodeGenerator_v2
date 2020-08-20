@@ -46,18 +46,7 @@ class ControlBoard(QGroupBox):
                     if sub.checkBox.isChecked():
                         num += sub.slider.value
 
-        if num != self.numberController.value:
+        if num != self.numberController.value or num == 0:
             return False
         else:
             return True
-
-        # equality = compareCharacterNumbers()
-
-        # if equality:
-        #     self.parent.column.setupBox.enableRadioButtons()
-        #     self.parent.column.generatorBox.enableRadioButtons()
-        # else:
-        #     self.parent.column.setupBox.disableRadioButtons()
-        #     self.parent.column.generatorBox.disableRadioButtons()
-        #     self.parent.column.generatorBox.disableButton()
-        #     self.parent.column.generatorBox.code_to_edit.setEnabled(False)

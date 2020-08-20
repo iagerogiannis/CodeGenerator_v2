@@ -25,7 +25,7 @@ class NumberLineEdit(QGroupBox):
 
         self.valueField = QLineEdit(self)
         self.valueField.setAlignment(Qt.AlignCenter)
-        self.valueField.textEdited.connect(self.handleValueChanged)
+        self.valueField.textChanged.connect(self.handleValueChanged)
 
         self.setValue(self.value)
 
@@ -35,8 +35,8 @@ class NumberLineEdit(QGroupBox):
             self.valueField.setText("0")
         elif not self.valueField.text().isdigit():
             self.valueField.setText(str(self.value))
-        elif int(self.valueField.text()) > 256:
-            self.valueField.setText("256")
+        elif int(self.valueField.text()) > 48:
+            self.valueField.setText("48")
         else:
             self.valueField.setText(str(int(self.valueField.text())))
             self.value = int(self.valueField.text())

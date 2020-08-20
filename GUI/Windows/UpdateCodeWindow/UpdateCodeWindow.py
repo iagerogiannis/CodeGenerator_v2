@@ -1,4 +1,5 @@
 from PyQt4.QtGui import QDialog, QPushButton, QHBoxLayout, QVBoxLayout, QLabel, QMessageBox
+from Errors.DatabaseErrors import *
 
 from GUI.Windows.UpdateCodeWindow.EditFieldCopyable import EditFieldCopyable
 
@@ -69,22 +70,29 @@ class UpdateCodeWindow(QDialog):
 
     def handleSave(self):
 
-        config.db_admin.editPassword(
-            self.pass_id,
-            self.account.value,
-            self.username.value,
-            self.email.value,
-            self.newPassword.value
-        )
+        try:
+            config.db_admin.editPassword(
+                self.pass_id,
+                self.account.value,
+                self.username.value,
+                self.email.value,
+                self.newPassword.value
+            )
 
-        self.parent.tab2.editPassword(self.pass_id,
-                                      self.account.value,
-                                      self.username.value,
-                                      self.email.value,
-                                      self.newPassword.value)
+            self.parent.tab2.editPassword(self.pass_id,
+                                          self.account.value,
+                                          self.username.value,
+                                          self.email.value,
+                                          self.newPassword.value)
 
-        QMessageBox.information(self, "Success", "Password updated successfully!")
-        self.close()
+            QMessageBox.information(self, "Success", "Password updated successfully!")
+            self.close()
+        except PassAccountLengthError:
+            QMessageBox.warning(self, "Error", "Account must contain between 4 and 48 characters!")
+        except PassUsernameLengthError:
+            QMessageBox.warning(self, "Error", "Username must contain less than 48 characters!")
+        except PassEmailLengthError:
+            QMessageBox.warning(self, "Error", "Email must contain less than 48 characters!")
 
     def handleCancel(self):
         self.close()

@@ -86,11 +86,18 @@ class NewUserWindow(QDialog):
             except EmptyUsernameError:
                 QMessageBox.warning(self, "Error", "Username may not be blank!")
             except InvalidCharactersInUsernameError:
-                QMessageBox.warning(self, "Error", "Username may not contain special characters!")
+                QMessageBox.warning(self, "Error", "Username may contain only letters (A-Z, a-z), "
+                                                   "numbers (0-9) and underscore (_)!")
             except UsernameUsedError:
                 QMessageBox.warning(self, "Error", "Username is already used!")
             except EmailUsedError:
                 QMessageBox.warning(self, "Error", "Email Address is already used!")
+            except UsernameLengthError:
+                QMessageBox.warning(self, "Error", "Username must contain between 6 and 48 characters!")
+            except EmailLengthError:
+                QMessageBox.warning(self, "Error", "Email Address must contain between 6 and 48 characters!")
+            except PasswordLengthError:
+                QMessageBox.warning(self, "Error", "Password must contain between 6 and 48 characters!")
         else:
             QMessageBox.warning(self, "Error", "Passwords do not match!")
 
