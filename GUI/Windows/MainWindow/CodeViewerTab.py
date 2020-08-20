@@ -150,9 +150,6 @@ class CodeViewerTab(QWidget):
 
         config.db_admin.removePassword(self.selected_id)
 
-        file = "{}/{}".format("Database", "salts.json")
-        jsonlib.drop_by_id(file, "password_id", self.selected_id)
-
         data = self.getTable()
         data = data[data.ID != self.selected_id]
         self.clearSelection()

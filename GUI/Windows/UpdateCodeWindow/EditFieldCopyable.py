@@ -1,3 +1,4 @@
+import pyperclip
 from PyQt4.QtGui import QWidget, QLabel, QHBoxLayout, QLineEdit
 
 from GUI.Components.ClickableTextLabel import ClickableTextLabel
@@ -21,7 +22,7 @@ class EditFieldCopyable(QWidget):
         self.lineEdit.textChanged.connect(self.handleTextChanged)
 
         if self.copyable:
-            self.copyLabel = ClickableTextLabel(self, "Copy")
+            self.copyLabel = ClickableTextLabel(self, "Copy", self.handleCopy)
         else:
             self.copyLabel = QLabel(self)
 
@@ -41,3 +42,6 @@ class EditFieldCopyable(QWidget):
 
     def handleTextChanged(self):
         self.value = self.lineEdit.text()
+
+    def handleCopy(self, event):
+        pyperclip.copy(self.value)

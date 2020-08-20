@@ -6,6 +6,7 @@ from pandas import DataFrame
 from Database.SecurityProtocol import SecurityProtocol as sp
 from Errors.DatabaseErrors import *
 from Generic.MyJsonLib import MyJsonLib as jsonlib
+from Generic.Generator import Generator as gen
 
 
 class DatabaseAdministrator:
@@ -110,13 +111,18 @@ class DatabaseAdministrator:
 
     def addPassword(self, account, username, email, password):
 
-        # def append_salt():
-        #     nonlocal salt
-        #     data = {"password_id": self.getLastIndex(), "salt": salt.decode("utf-8")}
-        #     file = "{}/{}".format("Database", "salts.json")
-        #     jsonlib.append_to_json(data, file)
-        #
-        # salt = sp.generate_salt()
+        def generate_salt():
+            setups_file = "{}/{}".format("Database", "setups.json")
+            setup = jsonlib.read_json(setups_file)[0]
+            return gen.produce_code(setup)
+
+        def append_salt():
+            nonlocal salt
+            data = {"password_id": self.getLastIndex(), "salt": salt}
+            file = "{}/{}".format("Database", "salts.json")
+            jsonlib.append_to_json(data, file)
+
+        salt = generate_salt()
 
         self.cursor.execute("INSERT INTO password (account, username, email, password, user_id) "
                             "VALUES (%s, %s, %s, %s, %s);",
@@ -124,43 +130,58 @@ class DatabaseAdministrator:
                              sp.aes_encrypt(username, self.admin_pass),
                              sp.aes_encrypt(email, self.admin_pass),
                              sp.aes_encrypt(
-                                 sp.aes_encrypt(password, self.user_hkey), self.admin_pass),
+                                 sp.aes_encrypt(password,
+                                                sp.protected_key_1(self.user_pass, salt)),
+                                 self.admin_pass),
                              self.user_id,))
 
-        # append_salt()
+        append_salt()
 
         self.connection.commit()
 
     def editPassword(self, pass_id, account, username, email, password):
 
-        # def overwrite_salt():
-        #     nonlocal pass_id
-        #     file = "{}/{}".format("Database", "salts.json")
-        #     data = {"password_id": int(pass_id), "salt": salt.decode('utf-8')}
-        #     jsonlib.overwrite_by_id(file, "password_id", int(pass_id), data)
+        def generate_salt():
+            setups_file = "{}/{}".format("Database", "setups.json")
+            setup = jsonlib.read_json(setups_file)[0]
+            return gen.produce_code(setup)
 
-        # salt = sp.generate_salt()
-        # overwrite_salt()
+        def overwrite_salt():
+            nonlocal pass_id
+            file = "{}/{}".format("Database", "salts.json")
+            data = {"password_id": int(pass_id), "salt": salt}
+            jsonlib.overwrite_by_id(file, "password_id", int(pass_id), data)
+
+        salt = generate_salt()
+        overwrite_salt()
 
         self.cursor.execute("UPDATE password SET account = %s, username = %s, email = %s, password = %s "
                             "WHERE password_id = %s;",
                             (sp.aes_encrypt(account, self.admin_pass),
                              sp.aes_encrypt(username, self.admin_pass),
                              sp.aes_encrypt(email, self.admin_pass),
-                             sp.aes_encrypt(sp.aes_encrypt(password, self.user_hkey), self.admin_pass),
+                             sp.aes_encrypt(sp.aes_encrypt(password,
+                                                           sp.protected_key_1(self.user_pass, salt)),
+                                            self.admin_pass),
                              int(pass_id),))
 
         self.connection.commit()
 
     def removePassword(self, pass_id):
+
+        def remove_salt():
+            file = "{}/{}".format("Database", "salts.json")
+            jsonlib.drop_by_id(file, "password_id", pass_id)
+
+        remove_salt()
         self.cursor.execute("DELETE FROM password WHERE password_id = %s;", (pass_id,))
         self.connection.commit()
 
     def getPasswords(self):
 
-        # def getSalt(password):
-        #     file = "{}/{}".format("Database", "salts.json")
-        #     return jsonlib.locate_by_id(file, "password_id", int(password[0]))["salt"]
+        def getSalt(password):
+            file = "{}/{}".format("Database", "salts.json")
+            return jsonlib.locate_by_id(file, "password_id", int(password[0]))["salt"]
 
         self.cursor.execute("SELECT * FROM password WHERE user_id = %s", (self.user_id,))
         passwords = self.cursor.fetchall()
@@ -170,7 +191,7 @@ class DatabaseAdministrator:
                           "Username": [sp.aes_decrypt(password[2], self.admin_pass) for password in passwords],
                           "Email": [sp.aes_decrypt(password[3], self.admin_pass) for password in passwords],
                           "Password": [sp.aes_decrypt(sp.aes_decrypt(password[4], self.admin_pass, decode=False),
-                                                      self.user_hkey)
+                                                      sp.protected_key_1(self.user_pass, getSalt(password)))
                                        for password in passwords]
                           })
 

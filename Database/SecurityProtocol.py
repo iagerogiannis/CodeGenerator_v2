@@ -31,25 +31,20 @@ class SecurityProtocol:
             return bcrypt.hashpw(password.encode('utf-8'), salt).decode('utf-8')
 
     @classmethod
-    def protected_key_1(cls, password, salt=None):
-        return cls.en_bcrypt(cls.en_hash(password), salt)
+    def protected_key_1(cls, password, salt):
+        return cls.en_hash("{}{}".format(salt, password))
 
     @classmethod
     def protected_key_2(cls, password, salt=None):
-        return cls.protected_key_1(cls.en_hash(password), salt)
+        return cls.en_bcrypt(cls.en_hash(password), salt)
 
     @classmethod
     def bcrypt_is_correct(cls, password, hashed):
         return hashed == bcrypt.hashpw(password.encode('utf-8'), hashed.encode('utf-8')).decode('utf-8')
 
     @classmethod
-    def key1_is_correct(cls, password_given, hashed_password):
-        return hashed_password == bcrypt.hashpw(cls.en_hash(password_given).encode('utf-8'),
-                                                hashed_password.encode('utf-8')).decode('utf-8')
-
-    @classmethod
     def key2_is_correct(cls, password_given, hashed_password):
-        return hashed_password == bcrypt.hashpw(cls.en_hash(cls.en_hash(password_given)).encode('utf-8'),
+        return hashed_password == bcrypt.hashpw(cls.en_hash(password_given).encode('utf-8'),
                                                 hashed_password.encode('utf-8')).decode('utf-8')
 
     @classmethod
