@@ -3,13 +3,14 @@ from PyQt4.QtGui import QWidget, QHBoxLayout, QLabel
 
 from GUI.Components.ClickableTextLabel import ClickableTextLabel
 
-import config
+from GUI.Windows.DeleteWindow import DeleteWindow
 
 
 class RemoveAccountField(QWidget):
 
     def __init__(self, parent):
         super().__init__(parent)
+        self.parent = parent
         self.buildUI()
 
     def buildUI(self):
@@ -28,4 +29,5 @@ class RemoveAccountField(QWidget):
         self.setLayout(layout)
 
     def handleRemoveAccount(self, event):
-        config.db_admin.removeUser()
+        self.removeWindow = DeleteWindow(self.parent)
+

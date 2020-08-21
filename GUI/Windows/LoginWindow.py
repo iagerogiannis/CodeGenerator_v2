@@ -90,4 +90,4 @@ class LoginWindow(QDialog):
         self.close()
 
     def closeEvent(self, event):
-        sys.exit()
+        exit()

@@ -217,7 +217,16 @@ class DatabaseAdministrator:
                 raise PasswordLengthError
 
     def removeUser(self):
-        print("Remove User")
+
+        def get_password_ids():
+            self.cursor.execute("SELECT password_id FROM password WHERE user_id = %s;", (int(self.user_id), ))
+            return [int(id_value[0]) for id_value in self.cursor.fetchall()]
+
+        for pass_id in get_password_ids():
+            self.removePassword(pass_id)
+
+        self.cursor.execute("DELETE FROM user WHERE user_id = %s;", (self.user_id,))
+        self.connection.commit()
 
     def checkPasswordEntry(self, account, username, email):
 

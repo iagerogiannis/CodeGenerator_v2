@@ -81,4 +81,4 @@ class MainWindow(QMainWindow):
 
     def closeEvent(self, event):
         if not self.return_to_login:
-            sys.exit()
+            exit()
