@@ -13,6 +13,8 @@ class ViewAccountWindow(QDialog):
     def __init__(self, parent):
         super().__init__(parent)
         self.parent = parent
+        self.childEdited = None
+        self.edited = False
         self.username_value, self.email_value = config.db_admin.getUserData()
         self.build_UI()
         self.show()
@@ -56,6 +58,25 @@ class ViewAccountWindow(QDialog):
         self.setWindowIcon(QIcon("Files/app.ico"))
         self.setFixedSize(350, 435)
 
+    def getEditedChild(self, current_child, edited):
+        if self.edited:
+            if self.childEdited:
+                if not (self.childEdited.title == "Password" and current_child.title == "Password"):
+                    self.childEdited.setFixedValue()
+        self.childEdited = current_child
+        self.edited = edited
+
     def closeEvent(self, event):
         self.parent.setEnabled(True)
         self.parent.setWindowOpacity(1.)
+
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key_Escape:
+            if not self.edited:
+                self.close()
+            else:
+                self.childEdited.setFixedValue()
+            self.edited = False
+        elif event.key() == Qt.Key_Enter or event.key() == Qt.Key_Return:
+            if self.edited:
+                self.childEdited.handleDone()

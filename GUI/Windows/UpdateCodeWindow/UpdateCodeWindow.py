@@ -1,9 +1,12 @@
+from PyQt4.QtCore import Qt
+
 from PyQt4.QtGui import QDialog, QPushButton, QHBoxLayout, QVBoxLayout, QLabel, QMessageBox
 from Errors.DatabaseErrors import *
 
 from GUI.Windows.UpdateCodeWindow.EditFieldCopyable import EditFieldCopyable
 
 import config
+
 
 class UpdateCodeWindow(QDialog):
 
@@ -100,3 +103,7 @@ class UpdateCodeWindow(QDialog):
     def closeEvent(self, event):
             self.parent.setEnabled(True)
             self.parent.setWindowOpacity(1.)
+
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key_Escape:
+            self.close()

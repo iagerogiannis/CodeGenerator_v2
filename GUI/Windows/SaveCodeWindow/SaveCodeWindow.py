@@ -1,3 +1,5 @@
+from PyQt4.QtCore import Qt
+
 from PyQt4.QtGui import QDialog, QPushButton, QHBoxLayout, QVBoxLayout, QMessageBox
 from Errors.DatabaseErrors import *
 
@@ -129,3 +131,7 @@ class SaveCodeWindow(QDialog):
     def closeEvent(self, event):
         self.parent.setEnabled(True)
         self.parent.setWindowOpacity(1.)
+
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key_Escape:
+            self.close()

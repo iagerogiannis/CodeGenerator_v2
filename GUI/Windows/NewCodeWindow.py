@@ -79,3 +79,7 @@ class NewCodeWindow(QDialog):
     def closeEvent(self, event):
         self.parent.setEnabled(True)
         self.parent.setWindowOpacity(1.)
+
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key_Escape:
+            self.close()

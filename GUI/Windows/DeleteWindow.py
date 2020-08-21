@@ -111,4 +111,3 @@ class DeleteWindow(QDialog):
         times = 3
         counter = 0
         fade()
-

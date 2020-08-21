@@ -91,3 +91,10 @@ class LoginWindow(QDialog):
 
     def closeEvent(self, event):
         exit()
+
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key_Enter or event.key() == Qt.Key_Return:
+            if self.username.hasFocus():
+                self.password.setFocus()
+            elif self.password.hasFocus():
+                self.handleLogin()

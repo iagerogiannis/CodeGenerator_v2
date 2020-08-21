@@ -29,10 +29,7 @@ class InfoField(QWidget):
         self.valueLabel.setText(self.value)
         self.valueLabel.setStyleSheet("font-weight: bold;")
 
-        if self.title != "Password":
-            self.editLabel = ClickableTextLabel(self, "Edit", self.handleEdit)
-        else:
-            self.editLabel = ClickableTextLabel(self, "Edit", self.handleEditPassword)
+        self.editLabel = ClickableTextLabel(self, "Edit", self.handlePressed)
 
         self.layout = QHBoxLayout()
 
@@ -49,7 +46,7 @@ class InfoField(QWidget):
         for i in range(number_of_widgets):
             self.layout.removeItem(self.layout.itemAt(0))
 
-    def replaceValueLabel(self):
+    def turnToEditable(self):
 
         self.resetLayout()
 
@@ -59,11 +56,15 @@ class InfoField(QWidget):
         else:
             self.valueLineEdit = MyLineEdit(self, "Enter new {}:".format(self.title))
 
+        self.valueLineEdit.setFocus()
+
         self.layout.addWidget(self.titleLabel, 285)
         self.layout.addWidget(self.valueLineEdit, 515)
         self.layout.addWidget(self.editLabel, 200)
 
-    def replaceValueLineEdit(self):
+        self.editLabel.setText("Done")
+
+    def setFixedValue(self):
 
         self.resetLayout()
 
@@ -79,12 +80,31 @@ class InfoField(QWidget):
         self.layout.addWidget(self.valueLabel, 50)
         self.layout.addWidget(self.editLabel, 20)
 
-    def handleEdit(self, event):
+        self.editLabel.setText("Edit")
+        self.times_pressed_done = 0
+        self.parent.edited = False
+
+    def handlePressed(self, event):
 
         if self.editLabel.text() == "Edit":
-            self.replaceValueLabel()
-            self.editLabel.setText("Done")
+            self.handleEdit()
+            self.parent.getEditedChild(self, True)
         else:
+            self.handleDone()
+            if self.title != "Password":
+                self.parent.getEditedChild(self, False)
+            else:
+                if self.times_pressed_done == 1:
+                    self.parent.getEditedChild(self, True)
+
+    def handleEdit(self):
+
+        self.turnToEditable()
+
+    def handleDone(self):
+
+        if self.title != "Password":
+
             self.new_value = self.valueLineEdit.text()
             try:
                 title = self.title.lower()
@@ -111,15 +131,10 @@ class InfoField(QWidget):
                 QMessageBox.warning(self, "Error", "Username must contain between 6 and 48 characters!")
             except EmailLengthError:
                 QMessageBox.warning(self, "Error", "Email Address must contain between 6 and 48 characters!")
-            self.replaceValueLineEdit()
-            self.editLabel.setText("Edit")
+            self.setFixedValue()
 
-    def handleEditPassword(self, event):
-
-        if self.editLabel.text() == "Edit":
-            self.replaceValueLabel()
-            self.editLabel.setText("Done")
         else:
+
             self.times_pressed_done = (self.times_pressed_done + 1) % 2
             if self.times_pressed_done == 1:
                 self.new_value = self.valueLineEdit.text()
@@ -140,5 +155,5 @@ class InfoField(QWidget):
                         QMessageBox.warning(self, "Error", "Password must contain between 6 and 48 characters!")
                 else:
                     QMessageBox.warning(self, "Error", "Passwords do not match!")
-                self.replaceValueLineEdit()
-                self.editLabel.setText("Edit")
+                self.setFixedValue()
+
