@@ -48,6 +48,8 @@ class DeleteWindow(QDialog):
 
         self.setLayout(mainLayout)
 
+        self.setWindowTitle("Code Generator")
+
     def handleSelectPath(self):
 
         # data = self.parent.tab2.getTable().drop(["ID"], axis=1)
