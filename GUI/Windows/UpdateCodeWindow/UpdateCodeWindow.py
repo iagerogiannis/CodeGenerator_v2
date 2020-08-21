@@ -69,6 +69,8 @@ class UpdateCodeWindow(QDialog):
 
         self.setLayout(layout)
 
+        self.setWindowTitle("Code Generator")
+
         self.setMinimumWidth(370)
 
     def handleSave(self):
