@@ -39,7 +39,7 @@ class DatabaseAdministrator:
 
     def userLogin(self, user_id, user_pass):
         self.user_id = int(user_id)
-        self.user_pass = user_pass
+        self.user_hkey = sp.en_hash(user_pass)
 
     def getAllUsers(self):
 
@@ -157,7 +157,7 @@ class DatabaseAdministrator:
                 nonlocal pass_id
                 self.cursor.execute("SELECT password FROM password WHERE password_id = %s;", (int(pass_id),))
                 return sp.aes_decrypt(sp.aes_decrypt(self.cursor.fetchone()[0], self.admin_pass, decode=False),
-                                      sp.protected_key_1(self.user_pass, get_salt()))
+                                      sp.protected_key_1(self.user_hkey, get_salt()))
 
             def edit_password():
                 nonlocal pass_id, salt
@@ -188,7 +188,7 @@ class DatabaseAdministrator:
             for password_id in get_password_ids():
                 edit_password_by_id(password_id)
             password_query()
-            self.user_pass = value
+            self.user_hkey = value
 
         self.connection.commit()
 
@@ -262,7 +262,7 @@ class DatabaseAdministrator:
                              sp.aes_encrypt(email, self.admin_pass),
                              sp.aes_encrypt(
                                  sp.aes_encrypt(password,
-                                                sp.protected_key_1(self.user_pass, salt)),
+                                                sp.protected_key_1(self.user_hkey, salt)),
                                  self.admin_pass),
                              self.user_id,))
 
@@ -293,7 +293,7 @@ class DatabaseAdministrator:
                              sp.aes_encrypt(username, self.admin_pass),
                              sp.aes_encrypt(email, self.admin_pass),
                              sp.aes_encrypt(sp.aes_encrypt(password,
-                                                           sp.protected_key_1(self.user_pass, salt)),
+                                                           sp.protected_key_1(self.user_hkey, salt)),
                                             self.admin_pass),
                              int(pass_id),))
 
@@ -323,7 +323,7 @@ class DatabaseAdministrator:
                           "Username": [sp.aes_decrypt(password[2], self.admin_pass) for password in passwords],
                           "Email": [sp.aes_decrypt(password[3], self.admin_pass) for password in passwords],
                           "Password": [sp.aes_decrypt(sp.aes_decrypt(password[4], self.admin_pass, decode=False),
-                                                      sp.protected_key_1(self.user_pass, getSalt(password)))
+                                                      sp.protected_key_1(self.user_hkey, getSalt(password)))
                                        for password in passwords]
                           })
 
