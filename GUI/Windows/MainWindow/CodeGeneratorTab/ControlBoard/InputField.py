@@ -1,5 +1,5 @@
-from PyQt4 import QtCore
-from PyQt4.QtGui import QGroupBox, QLabel, QLineEdit
+from PyQt5 import QtCore
+from PyQt5.QtWidgets import QGroupBox, QLabel, QLineEdit
 
 
 class InputField(QGroupBox):

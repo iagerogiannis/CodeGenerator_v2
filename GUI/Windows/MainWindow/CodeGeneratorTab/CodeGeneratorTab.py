@@ -1,4 +1,4 @@
-from PyQt4.QtGui import QWidget
+from PyQt5.QtWidgets import QWidget
 
 import config
 from GUI.Windows.MainWindow.CodeGeneratorTab.ControlBoard.ControlBoard import ControlBoard

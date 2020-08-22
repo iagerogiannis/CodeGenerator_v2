@@ -1,5 +1,5 @@
-from PyQt4.QtCore import Qt, QEvent
-from PyQt4.QtGui import QLabel
+from PyQt5.QtCore import Qt, QEvent
+from PyQt5.QtWidgets import QLabel
 
 
 class ClickableTextLabel(QLabel):

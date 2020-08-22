@@ -1,4 +1,4 @@
-from PyQt4.QtGui import *
+from PyQt5.QtWidgets import QGroupBox, QVBoxLayout
 
 from GUI.Components.MyCheckBox import MyCheckBox
 from GUI.Windows.MainWindow.CodeGeneratorTab.ControlBoard.SubController import SubController
@@ -31,7 +31,7 @@ class Controller(QGroupBox):
         layout.addWidget(self.sub2)
         self.setLayout(layout)
 
-        layout.setMargin(1)
+        layout.setContentsMargins(1, 1, 1, 1)
         layout.setSpacing(0)
 
     def handleSubControllers(self):

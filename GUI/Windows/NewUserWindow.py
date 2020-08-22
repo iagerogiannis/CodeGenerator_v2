@@ -1,5 +1,6 @@
-from PyQt4.QtGui import QDialog, QLabel, QPixmap, QPushButton, QVBoxLayout, QHBoxLayout, QIcon, QMessageBox
-from PyQt4 import QtCore
+from PyQt5.QtWidgets import QDialog, QLabel, QPushButton, QVBoxLayout, QHBoxLayout, QMessageBox
+from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5 import QtCore
 
 import config
 from Errors.DatabaseErrors import *
@@ -32,7 +33,7 @@ class NewUserWindow(QDialog):
         title.setText("Code Generator")
         title.setAlignment(QtCore.Qt.AlignCenter)
         title.setStyleSheet("font: 25pt Cronus Round")
-        title.setMargin(10)
+        title.setContentsMargins(10, 10, 10, 10)
 
         # Inputs -------------------------------------------------------------------------------------------------------
         self.username = MyLineEdit(self, "Username")
@@ -66,7 +67,7 @@ class NewUserWindow(QDialog):
 
         self.setLayout(layout)
 
-        layout.setMargin(20)
+        layout.setContentsMargins(20, 20, 20, 20)
         self.setWindowTitle("Code Generator")
         self.setWindowIcon(QIcon("Files/app.ico"))
         self.setFixedSize(270, 390)

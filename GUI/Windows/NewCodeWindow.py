@@ -1,5 +1,6 @@
-from PyQt4.QtCore import Qt
-from PyQt4.QtGui import QDialog, QPushButton, QHBoxLayout, QVBoxLayout, QIcon, QLineEdit, QLabel
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QDialog, QPushButton, QHBoxLayout, QVBoxLayout, QLineEdit, QLabel
+from PyQt5.QtGui import QIcon
 
 from Generic.Generator import Generator
 
@@ -49,13 +50,13 @@ class NewCodeWindow(QDialog):
         mainlayout.addLayout(codelayout)
         mainlayout.addLayout(buttons)
 
-        codelayout.setMargin(1)
+        codelayout.setContentsMargins(1, 1, 1, 1)
         codelayout.setSpacing(4)
 
-        buttons.setMargin(0)
+        buttons.setContentsMargins(0, 0, 0, 0)
         buttons.setSpacing(5)
 
-        mainlayout.setMargin(20)
+        mainlayout.setContentsMargins(20, 20, 20, 20)
         mainlayout.setSpacing(7)
 
         self.setLayout(mainlayout)

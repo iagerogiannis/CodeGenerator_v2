@@ -1,4 +1,6 @@
-from PyQt4 import QtGui, QtCore
+from PyQt5.QtWidgets import QGroupBox, QLabel
+from PyQt5.QtCore import Qt, QEvent
+
 from typing_extensions import TypedDict
 
 from Styles.styles import KeyStyle
@@ -11,9 +13,9 @@ class PrimaryKeyProperties(TypedDict):
     shiftIn: str
 
 
-class PrimaryKey(QtGui.QGroupBox):
+class PrimaryKey(QGroupBox):
 
-    parent: QtGui.QGroupBox
+    parent: QGroupBox
     properties: PrimaryKeyProperties
     key_size: int
     pressed: bool
@@ -29,7 +31,7 @@ class PrimaryKey(QtGui.QGroupBox):
         self.key_size = 10
         self.properties = properties
         self.myStyle = parent.myStyle["keyStyle"]
-        self.parts = [QtGui.QLabel(self) for i in range(4)]
+        self.parts = [QLabel(self) for i in range(4)]
         self.pressed = pressed
 
         self.enableMouseHover()
@@ -53,11 +55,11 @@ class PrimaryKey(QtGui.QGroupBox):
             def setText():
 
                 self.parts[0].setText(self.properties["shiftIn"])
-                self.parts[0].setAlignment(QtCore.Qt.AlignCenter)
+                self.parts[0].setAlignment(Qt.AlignCenter)
 
                 if self.properties["type"] != "Letter":
                     self.parts[1].setText(self.properties["shiftOut"])
-                    self.parts[1].setAlignment(QtCore.Qt.AlignCenter)
+                    self.parts[1].setAlignment(Qt.AlignCenter)
 
             def setStyle():
 
@@ -108,12 +110,12 @@ class PrimaryKey(QtGui.QGroupBox):
 
     def eventFilter(self, source, event):
         if not self.pressed:
-            if event.type() == QtCore.QEvent.MouseMove:
-                if event.buttons() == QtCore.Qt.NoButton:
+            if event.type() == QEvent.MouseMove:
+                if event.buttons() == Qt.NoButton:
                     self.buildKey("onHover")
-            elif event.type() == QtCore.QEvent.Leave:
+            elif event.type() == QEvent.Leave:
                 self.buildKey("inactive")
-        return QtGui.QLabel.eventFilter(self, source, event)
+        return QLabel.eventFilter(self, source, event)
 
     def resizeEvent(self, event):
         self.key_size = self.size().width()

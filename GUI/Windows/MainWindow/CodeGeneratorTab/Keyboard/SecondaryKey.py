@@ -1,4 +1,5 @@
-from PyQt4 import QtGui, QtCore
+from PyQt5.QtWidgets import QLabel, QGroupBox
+from PyQt5.QtCore import Qt
 from typing_extensions import TypedDict
 
 from Styles.styles import KeyStyle
@@ -11,9 +12,9 @@ class SecondaryKeyProperties(TypedDict):
     aspectRatio: float
 
 
-class SecondaryKey(QtGui.QLabel):
+class SecondaryKey(QLabel):
 
-    parent: QtGui.QGroupBox
+    parent: QGroupBox
     properties: SecondaryKeyProperties
     key_size: []
     myStyle: KeyStyle
@@ -39,10 +40,10 @@ class SecondaryKey(QtGui.QLabel):
                                    self.myStyle["colors"]["inactive"]["text"]))
         if self.properties["side"] == "right":
             self.setText(self.properties["text"] + "  ")
-            self.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+            self.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         if self.properties["side"] == "left":
             self.setText("  " + self.properties["text"])
-            self.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
+            self.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
 
     def resizeEvent(self, event):
         self.key_size = [self.size().width(), self.size().height()]

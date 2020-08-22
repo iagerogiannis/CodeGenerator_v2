@@ -1,4 +1,4 @@
-from PyQt4.QtGui import QGroupBox
+from PyQt5.QtWidgets import QGroupBox
 
 from GUI.Windows.MainWindow.CodeGeneratorTab.Keyboard.PrimaryKey import PrimaryKey
 from GUI.Windows.MainWindow.CodeGeneratorTab.Keyboard.SecondaryKey import SecondaryKey

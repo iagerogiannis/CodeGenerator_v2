@@ -1,4 +1,4 @@
-from PyQt4.QtGui import QMainWindow, QMessageBox, QAction, QFileDialog
+from PyQt5.QtWidgets import QMainWindow, QMessageBox, QAction, QFileDialog
 
 import config
 from Generic.MyJsonLib import MyJsonLib as jsonlib
@@ -80,14 +80,14 @@ class MainMenu:
 
     def handleExportFile(self):
         data = self.parent.tab2.getTable().drop(["ID"], axis=1)
-        filename = QFileDialog.getSaveFileNameAndFilter(self.parent, 'Export Codes File', 'CodesFile',
+        filename = QFileDialog.getSaveFileName(self.parent, 'Export Codes File', 'CodesFile',
                                                               filter="JSON Files (*.json)")
         if filename[0] != '':
             jsonlib.export_data(data, filename[0])
             QMessageBox.information(self.parent, "Success", "Codes File Exported successfully!")
 
     def handleImportFile(self):
-        filename = QFileDialog.getOpenFileNameAndFilter(self.parent, 'Import Codes File',
+        filename = QFileDialog.getOpenFileName(self.parent, 'Import Codes File',
                                                               filter="JSON Files (*.json)")
         if filename[0] != '':
             codes_data = jsonlib.import_data(filename[0])

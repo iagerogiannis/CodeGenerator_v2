@@ -1,5 +1,6 @@
-from PyQt4.QtCore import Qt
-from PyQt4.QtGui import QDialog, QPixmap, QVBoxLayout, QIcon, QLabel
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QDialog, QVBoxLayout, QLabel
+from PyQt5.QtGui import QIcon, QPixmap
 
 from GUI.Windows.ViewAccountWindow.InfoField import InfoField
 from GUI.Windows.ViewAccountWindow.RemoveAccountField import RemoveAccountField
@@ -33,7 +34,7 @@ class ViewAccountWindow(QDialog):
         title.setText("Account Info")
         title.setAlignment(Qt.AlignCenter)
         title.setStyleSheet("font: 25pt Cronus Round")
-        title.setMargin(10)
+        title.setContentsMargins(10, 10, 10, 10)
 
         # Labels -------------------------------------------------------------------------------------------------------
         self.username = InfoField(self, "Username", self.username_value)
@@ -53,7 +54,7 @@ class ViewAccountWindow(QDialog):
 
         self.setLayout(layout)
 
-        layout.setMargin(20)
+        layout.setContentsMargins(20, 20, 20, 20)
         self.setWindowTitle("Code Generator")
         self.setWindowIcon(QIcon("Files/app.ico"))
         self.setFixedSize(350, 435)

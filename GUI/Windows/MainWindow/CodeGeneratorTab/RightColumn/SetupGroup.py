@@ -1,5 +1,5 @@
-from PyQt4.QtGui import QGroupBox, QComboBox, QVBoxLayout, QHBoxLayout, QPushButton, QButtonGroup, QRadioButton
-from PyQt4.QtCore import Qt
+from PyQt5.QtWidgets import QGroupBox, QComboBox, QVBoxLayout, QHBoxLayout, QPushButton, QButtonGroup, QRadioButton
+from PyQt5.QtCore import Qt
 
 from Generic.MyJsonLib import MyJsonLib as jsonlib
 
@@ -52,7 +52,7 @@ class SetupGroup(QGroupBox):
         self.handleSetupComboChanged()
 
         buttons = QHBoxLayout()
-        buttons.setMargin(0)
+        buttons.setContentsMargins(0, 0, 0, 0)
         buttons.setSpacing(0)
         buttons.addWidget(self.saveButton)
         buttons.addWidget(self.removeButton)

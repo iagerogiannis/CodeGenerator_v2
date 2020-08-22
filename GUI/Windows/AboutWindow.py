@@ -1,5 +1,6 @@
-from PyQt4.QtCore import Qt
-from PyQt4.QtGui import QDialog, QPixmap, QVBoxLayout, QIcon, QLabel
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QDialog, QVBoxLayout, QLabel
+from PyQt5.QtGui import QIcon, QPixmap
 
 
 # # noinspection PyCallByClass,PyArgumentList
@@ -26,7 +27,7 @@ class AboutWindow(QDialog):
         title.setText("IAG Solutions")
         title.setAlignment(Qt.AlignCenter)
         title.setStyleSheet("font: 25pt Caveman; font-weight: bold ; color: #1c003f")
-        title.setMargin(10)
+        title.setContentsMargins(10, 10, 10, 10)
 
         logoLayout = QVBoxLayout()
         logoLayout.addWidget(image)
@@ -38,7 +39,7 @@ class AboutWindow(QDialog):
         self.application.setStyleSheet("font: 25pt Cronus Round")
 
         self.version = QLabel(self)
-        self.version.setText("Version 2.0.0")
+        self.version.setText("Version 2.1.0")
         self.version.setStyleSheet("font: 11pt")
 
         self.built_on = QLabel(self)
@@ -61,11 +62,11 @@ class AboutWindow(QDialog):
         mainLayout.addLayout(infoLayout)
         self.setLayout(mainLayout)
 
-        mainLayout.setMargin(30)
+        mainLayout.setContentsMargins(30, 30, 30, 30)
         mainLayout.setSpacing(0)
-        logoLayout.setMargin(0)
+        logoLayout.setContentsMargins(0, 0, 0, 0)
         logoLayout.setSpacing(5)
-        infoLayout.setMargin(10)
+        infoLayout.setContentsMargins(10, 10, 10, 10)
         infoLayout.setSpacing(5)
 
         self.setWindowTitle("Code Generator")

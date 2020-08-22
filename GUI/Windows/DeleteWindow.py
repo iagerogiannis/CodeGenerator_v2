@@ -1,5 +1,5 @@
-from PyQt4.QtGui import QMessageBox, QDialog, QLabel, QCheckBox, QLineEdit, QHBoxLayout, QVBoxLayout, QPushButton, QFileDialog
-from PyQt4.QtCore import QTimer, Qt
+from PyQt5.QtWidgets import QMessageBox, QDialog, QLabel, QCheckBox, QLineEdit, QHBoxLayout, QVBoxLayout, QPushButton, QFileDialog
+from PyQt5.QtCore import QTimer
 
 import config
 from Generic.MyJsonLib import MyJsonLib as jsonlib

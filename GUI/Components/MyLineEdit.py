@@ -1,4 +1,4 @@
-from PyQt4.QtGui import QLineEdit
+from PyQt5.QtWidgets import QLineEdit
 
 
 class MyLineEdit(QLineEdit):

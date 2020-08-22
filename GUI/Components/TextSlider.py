@@ -1,5 +1,5 @@
-from PyQt4.QtGui import *
-from PyQt4.QtCore import Qt
+from PyQt5.QtWidgets import QLineEdit, QSlider, QGroupBox
+from PyQt5.QtCore import Qt
 from GUI.Components.MySlider import MySlider
 
 

@@ -1,4 +1,4 @@
-from PyQt4.QtGui import *
+from PyQt5.QtWidgets import QGroupBox, QHBoxLayout, QVBoxLayout
 
 from GUI.Windows.MainWindow.CodeGeneratorTab.ControlBoard.Controller import Controller
 from GUI.Windows.MainWindow.CodeGeneratorTab.ControlBoard.NumberLineEdit import NumberLineEdit
@@ -18,7 +18,7 @@ class ControlBoard(QGroupBox):
         self.numberController = NumberLineEdit(self)
 
         controllersLayout = QHBoxLayout()
-        controllersLayout.setMargin(1)
+        controllersLayout.setContentsMargins(1, 1, 1, 1)
         controllersLayout.setSpacing(1)
 
         for controller in self.controllers:
@@ -30,9 +30,9 @@ class ControlBoard(QGroupBox):
 
         self.setLayout(mainLayout)
 
-        controllersLayout.setMargin(0)
+        controllersLayout.setContentsMargins(0, 0, 0, 0)
         controllersLayout.setSpacing(1)
-        mainLayout.setMargin(1)
+        mainLayout.setContentsMargins(1, 1, 1, 1)
         mainLayout.setSpacing(0)
 
     # Compares the sum of the values of sliders with the value of character numbers of lineedit

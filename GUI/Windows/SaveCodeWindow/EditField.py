@@ -1,4 +1,4 @@
-from PyQt4.QtGui import QWidget, QLabel, QHBoxLayout, QLineEdit
+from PyQt5.QtWidgets import QWidget, QLabel, QHBoxLayout, QLineEdit
 
 
 class EditField(QWidget):
@@ -23,7 +23,7 @@ class EditField(QWidget):
         layout.addWidget(self.titleLabel, 1)
         layout.addWidget(self.lineEdit, 2)
 
-        layout.setMargin(1)
+        layout.setContentsMargins(1, 1, 1, 1)
         layout.setSpacing(3)
 
         self.setLayout(layout)

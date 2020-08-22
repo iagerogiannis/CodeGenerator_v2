@@ -1,6 +1,6 @@
-from PyQt4.QtCore import Qt
+from PyQt5.QtCore import Qt
 
-from PyQt4.QtGui import QDialog, QPushButton, QHBoxLayout, QVBoxLayout, QMessageBox
+from PyQt5.QtWidgets import QDialog, QPushButton, QHBoxLayout, QVBoxLayout, QMessageBox
 from Errors.DatabaseErrors import *
 
 from GUI.Windows.SaveCodeWindow.EditField import EditField
@@ -57,9 +57,9 @@ class SaveCodeWindow(QDialog):
         layout.addWidget(self.password)
         layout.addLayout(buttons)
 
-        buttons.setMargin(0)
+        buttons.setContentsMargins(0, 0, 0, 0)
         buttons.setSpacing(5)
-        layout.setMargin(20)
+        layout.setContentsMargins(20, 20, 20, 20)
         layout.setSpacing(9)
 
         self.setLayout(layout)

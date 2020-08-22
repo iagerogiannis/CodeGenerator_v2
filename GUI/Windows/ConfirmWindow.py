@@ -1,4 +1,4 @@
-from PyQt4.QtGui import QDialog, QLabel, QLineEdit, QPushButton, QVBoxLayout
+from PyQt5.QtWidgets import QDialog, QLabel, QLineEdit, QPushButton, QVBoxLayout
 
 import config
 
@@ -29,6 +29,8 @@ class ConfirmWindow(QDialog):
         layout.addWidget(self.button)
 
         self.setLayout(layout)
+
+        self.setWindowTitle("Code Generator")
 
     def handleConfirm(self):
         if config.db_admin.validatePassword(self.passLineEdit.text()):

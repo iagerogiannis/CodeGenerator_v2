@@ -1,5 +1,5 @@
-from PyQt4.QtCore import QEvent
-from PyQt4.QtGui import QWidget, QTableWidget, QPushButton, QVBoxLayout, \
+from PyQt5.QtCore import QEvent
+from PyQt5.QtWidgets import QWidget, QTableWidget, QPushButton, QVBoxLayout, \
     QHBoxLayout, QAbstractItemView, QTableWidgetItem, QHeaderView, QMessageBox
 
 import pyperclip
@@ -30,7 +30,7 @@ class CodeViewerTab(QWidget):
         self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.table.viewport().installEventFilter(self)
         self.table.itemSelectionChanged.connect(self.selected)
-        self.table.horizontalHeader().setResizeMode(QHeaderView.Stretch)
+        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.table.setSortingEnabled(True)
         self.table.setColumnHidden(0, True)
 
@@ -55,7 +55,7 @@ class CodeViewerTab(QWidget):
         self.removeButton.clicked.connect(self.handleRemove)
 
         buttons = QHBoxLayout()
-        buttons.setMargin(0)
+        buttons.setContentsMargins(0, 0, 0, 0)
         buttons.setSpacing(0)
 
         buttons.addWidget(self.copyButton)
@@ -64,7 +64,7 @@ class CodeViewerTab(QWidget):
         buttons.addWidget(self.removeButton)
 
         mainlayout = QVBoxLayout()
-        mainlayout.setMargin(0)
+        mainlayout.setContentsMargins(0, 0, 0, 0)
 
         mainlayout.addWidget(self.table)
         mainlayout.addLayout(buttons)

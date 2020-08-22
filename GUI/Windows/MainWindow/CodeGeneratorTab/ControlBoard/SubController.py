@@ -1,4 +1,4 @@
-from PyQt4.QtGui import *
+from PyQt5.QtWidgets import QGroupBox, QCheckBox, QVBoxLayout
 
 from GUI.Components.TextSlider import TextSlider
 
@@ -30,7 +30,7 @@ class SubController(QGroupBox):
         layout.addWidget(self.slider)
         self.setLayout(layout)
 
-        layout.setMargin(1)
+        layout.setContentsMargins(1, 1, 1, 1)
         layout.setSpacing(0)
 
     def handleSliders(self):

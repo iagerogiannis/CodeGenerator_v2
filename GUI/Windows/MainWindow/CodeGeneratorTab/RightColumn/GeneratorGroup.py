@@ -1,4 +1,4 @@
-from PyQt4.QtGui import QGroupBox, QVBoxLayout, QPushButton, QLineEdit, QButtonGroup, QRadioButton
+from PyQt5.QtWidgets import QGroupBox, QVBoxLayout, QPushButton, QLineEdit, QButtonGroup, QRadioButton
 
 
 class GeneratorGroup(QGroupBox):

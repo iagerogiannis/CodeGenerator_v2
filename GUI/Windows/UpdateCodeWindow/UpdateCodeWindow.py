@@ -1,6 +1,6 @@
-from PyQt4.QtCore import Qt
+from PyQt5.QtCore import Qt
 
-from PyQt4.QtGui import QDialog, QPushButton, QHBoxLayout, QVBoxLayout, QLabel, QMessageBox
+from PyQt5.QtWidgets import QDialog, QPushButton, QHBoxLayout, QVBoxLayout, QLabel, QMessageBox
 from Errors.DatabaseErrors import *
 
 from GUI.Windows.UpdateCodeWindow.EditFieldCopyable import EditFieldCopyable
@@ -61,10 +61,10 @@ class UpdateCodeWindow(QDialog):
         layout.addWidget(self.newPassword)
         layout.addLayout(buttons)
 
-        buttons.setMargin(0)
+        buttons.setContentsMargins(0, 0, 0, 0)
         buttons.setSpacing(10)
 
-        layout.setMargin(20)
+        layout.setContentsMargins(20, 20, 20, 20)
         layout.setSpacing(9)
 
         self.setLayout(layout)

@@ -1,7 +1,8 @@
 import sys
 
-from PyQt4.QtCore import Qt
-from PyQt4.QtGui import QDialog, QLabel, QPixmap, QPushButton, QHBoxLayout, QVBoxLayout, QMessageBox, QIcon
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QDialog, QLabel, QPushButton, QHBoxLayout, QVBoxLayout, QMessageBox
+from PyQt5.QtGui import QIcon, QPixmap
 
 import config
 from GUI.Components.MyLineEdit import MyLineEdit
@@ -32,7 +33,7 @@ class LoginWindow(QDialog):
         title.setText("Code Generator")
         title.setAlignment(Qt.AlignCenter)
         title.setStyleSheet("font: 25pt Cronus Round")
-        title.setMargin(10)
+        title.setContentsMargins(10, 10, 10, 10)
 
         # Inputs -------------------------------------------------------------------------------------------------------
         self.username = MyLineEdit(self, "Username")
@@ -66,13 +67,12 @@ class LoginWindow(QDialog):
 
         self.setLayout(layout)
 
-        layout.setMargin(20)
+        layout.setContentsMargins(20, 20, 20, 20)
         self.setWindowTitle("Code Generator")
         self.setWindowIcon(QIcon("Files/app.ico"))
         self.setFixedSize(270, 350)
-        # self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
 
-        self.setWindowFlags(Qt.WindowSystemMenuHint)
+        # self.setWindowFlags(Qt.WindowSystemMenuHint)
 
         self.show()
 
@@ -90,7 +90,7 @@ class LoginWindow(QDialog):
         self.close()
 
     def closeEvent(self, event):
-        exit()
+        sys.exit()
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Enter or event.key() == Qt.Key_Return:

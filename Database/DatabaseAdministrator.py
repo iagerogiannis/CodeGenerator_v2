@@ -7,7 +7,6 @@ from Database.SecurityProtocol import SecurityProtocol as sp
 from Errors.DatabaseErrors import *
 from Generic.MyJsonLib import MyJsonLib as jsonlib
 from Generic.Generator import Generator as gen
-from GUI.Windows.ConfirmWindow import ConfirmWindow
 
 
 class DatabaseAdministrator:
@@ -163,7 +162,7 @@ class DatabaseAdministrator:
                 nonlocal pass_id, salt
                 password = get_password()
                 self.cursor.execute("UPDATE password SET password = %s WHERE password_id = %s;",
-                                    (sp.aes_encrypt(sp.aes_encrypt(password, sp.protected_key_1(value, salt)),
+                                    (sp.aes_encrypt(sp.aes_encrypt(password, sp.protected_key_1(sp.en_hash(value), salt)),
                                                     self.admin_pass),
                                      int(pass_id),))
                 self.connection.commit()

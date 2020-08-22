@@ -1,4 +1,4 @@
-from PyQt4.QtGui import QWidget, QLabel, QHBoxLayout, QDialog, QMessageBox
+from PyQt5.QtWidgets import QWidget, QLabel, QHBoxLayout, QDialog, QMessageBox
 
 from GUI.Components.MyLineEdit import MyLineEdit
 

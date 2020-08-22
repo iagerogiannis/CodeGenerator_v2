@@ -1,5 +1,7 @@
 import sys
-from PyQt4.QtGui import QMainWindow, QIcon, QTabWidget, QDialog
+
+from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QMainWindow, QTabWidget, QDialog
 
 from GUI.Windows.AboutWindow import AboutWindow
 from GUI.Windows.MainWindow.CodeGeneratorTab.CodeGeneratorTab import CodeGeneratorTab
@@ -81,4 +83,4 @@ class MainWindow(QMainWindow):
 
     def closeEvent(self, event):
         if not self.return_to_login:
-            exit()
+            sys.exit()

@@ -1,4 +1,4 @@
-from PyQt4.QtGui import QCheckBox
+from PyQt5.QtWidgets import QCheckBox
 
 
 class MyCheckBox(QCheckBox):

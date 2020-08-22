@@ -1,5 +1,5 @@
 import pyperclip
-from PyQt4.QtGui import QWidget, QLabel, QHBoxLayout, QLineEdit
+from PyQt5.QtWidgets import QWidget, QLabel, QHBoxLayout, QLineEdit
 
 from GUI.Components.ClickableTextLabel import ClickableTextLabel
 
@@ -32,7 +32,7 @@ class EditFieldCopyable(QWidget):
         layout.addWidget(self.lineEdit, 45)
         layout.addWidget(self.copyLabel, 10)
 
-        layout.setMargin(1)
+        layout.setContentsMargins(1, 1, 1, 1)
         layout.setSpacing(10)
 
         self.setLayout(layout)

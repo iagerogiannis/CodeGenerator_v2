@@ -1,9 +1,6 @@
-###!/usr/local/bin/python3.7
-
-
 import sys
 
-from PyQt4.QtGui import QApplication, QDialog
+from PyQt5.QtWidgets import QApplication, QDialog
 
 import config
 from GUI.Windows.LoginWindow import LoginWindow

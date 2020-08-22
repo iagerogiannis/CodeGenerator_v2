@@ -1,4 +1,4 @@
-from PyQt4.QtGui import QWidget, QVBoxLayout
+from PyQt5.QtWidgets import QWidget, QVBoxLayout
 
 from GUI.Windows.MainWindow.CodeGeneratorTab.RightColumn.GeneratorGroup import GeneratorGroup
 from GUI.Windows.MainWindow.CodeGeneratorTab.RightColumn.SetupGroup import SetupGroup
@@ -17,7 +17,7 @@ class RightColumn(QWidget):
         self.generatorBox = GeneratorGroup(self)
 
         mainlayout = QVBoxLayout()
-        mainlayout.setMargin(1)
+        mainlayout.setContentsMargins(1, 1, 1, 1)
         mainlayout.setSpacing(3)
 
         mainlayout.addWidget(self.setupBox)
