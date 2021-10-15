@@ -1,7 +1,7 @@
 # Code Generator
 
 Code Generator is a password management desktop application developed in PyQt5. It is used for production of strong passwords with
-fully controlled criteria, for storing those passwords in MySQL encrypted database and for updating the passwords conviniently. It allows
+fully controllable criteria, for storing those passwords in MySQL encrypted database and for updating the passwords conviniently. It allows
 multiple users to manage their own passwords safely.
 
 ## User Interface
